@@ -52,10 +52,12 @@
 				scene = new THREE.Scene();
 				var geometry = new THREE.SphereGeometry( 500, 60, 40 );
 				geometry.scale( - 1, 1, 1 );
-				var material = new THREE.MeshBasicMaterial
-				({
-					map: new THREE.TextureLoader().load( '01.jpg' )
-				});
+
+				var texture = new THREE.TextureLoader().load( 'images/01.jpg' );
+				THREE.ImageUtils.crossOrigin = 'anonymous';
+				texture.format = THREE.RGBFormat;
+				var material = new THREE.MeshBasicMaterial( { map: texture } );
+
 				mesh = new THREE.Mesh( geometry, material );
 				scene.add( mesh );
 				renderer = new THREE.WebGLRenderer();
@@ -79,24 +81,45 @@
 					false
 				);
 
-				document.addEventListener( 'dragenter', function ( event ) {
+				document.addEventListener
+				(
+				 'dragenter',
+				  function ( event )
+				  {
 					document.body.style.opacity = 0.5;
-				}, false );
+				  },
+				  false 
+				);
 
-				document.addEventListener( 'dragleave', function ( event ) {
+				document.addEventListener
+				(
+				 'dragleave',
+				  function ( event )
+				  {
 					document.body.style.opacity = 1;
-				}, false );
+				  },
+				  false
+				);
 
-				document.addEventListener( 'drop', function ( event ) {
+				document.addEventListener
+				(
+				 'drop',
+				 function ( event ) 
+				 {
 					event.preventDefault();
 					var reader = new FileReader();
-					reader.addEventListener( 'load', function ( event ) {
+					reader.addEventListener( 'load', function ( event ) 
+					{
 						material.map.image.src = event.target.result;
+						console.log(event.dataTransfer.files[ 0 ]);
 						material.map.needsUpdate = true;
 					}, false );
+
 					reader.readAsDataURL( event.dataTransfer.files[ 0 ] );
 					document.body.style.opacity = 1;
-				}, false );
+				 },
+				 false
+				);
 				//
 				window.addEventListener( 'resize', onWindowResize, false );
 			}
@@ -160,11 +183,6 @@
 
 			function update() 
 			{
-				if ( isUserInteracting === false )
-				{
-					lon += 0.1;
-				}
-
 				lat = Math.max( - 85, Math.min( 85, lat ) );
 				phi = THREE.Math.degToRad( 90 - lat );
 				theta = THREE.Math.degToRad( lon );

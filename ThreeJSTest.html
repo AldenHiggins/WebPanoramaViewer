@@ -33,8 +33,10 @@
 
 		<script src="js/three.min.js"></script>
 
+		<script src="js/effects/StereoEffect.js"></script>
+
 		<script>
-			var camera, scene, renderer;
+			var camera, scene, renderer, effect;
 			var isUserInteracting = false,
 			onMouseDownMouseX = 0, onMouseDownMouseY = 0,
 			lon = 0, onMouseDownLon = 0,
@@ -63,6 +65,11 @@
 				renderer = new THREE.WebGLRenderer();
 				renderer.setPixelRatio( window.devicePixelRatio );
 				renderer.setSize( window.innerWidth, window.innerHeight );
+
+
+				effect = new THREE.StereoEffect( renderer );
+				effect.setSize( window.innerWidth, window.innerHeight );
+
 				container.appendChild( renderer.domElement );
 				document.addEventListener( 'mousedown', onDocumentMouseDown, false );
 				document.addEventListener( 'mousemove', onDocumentMouseMove, false );
@@ -120,7 +127,7 @@
 				 },
 				 false
 				);
-				//
+				
 				window.addEventListener( 'resize', onWindowResize, false );
 			}
 
@@ -190,11 +197,9 @@
 				camera.target.y = 500 * Math.cos( phi );
 				camera.target.z = 500 * Math.sin( phi ) * Math.sin( theta );
 				camera.lookAt( camera.target );
-				/*
-				// distortion
-				camera.position.copy( camera.target ).negate();
-				*/
-				renderer.render( scene, camera );
+
+				effect.render ( scene, camera );
+				// renderer.render( scene, camera );
 			}
 
 		</script>

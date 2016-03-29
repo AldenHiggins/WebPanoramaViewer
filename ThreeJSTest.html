@@ -50,26 +50,36 @@
 			{
 				var container, mesh;
 				container = document.getElementById( 'container' );
+				// Set up the camera
 				camera = new THREE.PerspectiveCamera( 75, window.innerWidth / window.innerHeight, 1, 1100 );
 				camera.position.set(0, 15, 0);
-				// camera.target = new THREE.Vector3( 0, 0, 0 );
+
+				// Set up the scene
 				scene = new THREE.Scene();
 				scene.add(camera);
+
+				// Surround the user with a sphere
 				var geometry = new THREE.SphereGeometry( 500, 60, 40 );
 				geometry.scale( - 1, 1, 1 );
 
+				// Load up a sample image to wrap into the sphere
 				var texture = new THREE.TextureLoader().load( 'images/01.jpg' );
-				// THREE.ImageUtils.crossOrigin = 'anonymous';
 				texture.format = THREE.RGBFormat;
+
+				// Create a material with the texture
 				var material = new THREE.MeshBasicMaterial( { map: texture } );
 
+				// Create a mesh using the sphere and the cretaed material and add it to the scene
 				mesh = new THREE.Mesh( geometry, material );
 				scene.add( mesh );
+
+				// Set up the renderer
 				renderer = new THREE.WebGLRenderer();
 				element = renderer.domElement;
 				renderer.setPixelRatio( window.devicePixelRatio );
 				renderer.setSize( window.innerWidth, window.innerHeight );
 
+				// Set up the stereo effect using the renderer
 				effect = new THREE.StereoEffect( renderer );
 				effect.setSize( window.innerWidth, window.innerHeight );
 
@@ -103,6 +113,9 @@
 		        }
 		        window.addEventListener('deviceorientation', setOrientationControls, true);
 
+		        ////////////////////////////////
+		        /////// Event callbacks ////////
+		        ////////////////////////////////
 				document.addEventListener( 'mousedown', onDocumentMouseDown, false );
 				document.addEventListener( 'mousemove', onDocumentMouseMove, false );
 				document.addEventListener( 'mouseup', onDocumentMouseUp, false );
@@ -242,14 +255,6 @@
 
 			function update(dt) 
 			{
-				// lat = Math.max( - 85, Math.min( 85, lat ) );
-				// phi = THREE.Math.degToRad( 90 - lat );
-				// theta = THREE.Math.degToRad( lon );
-				// camera.target.x = 500 * Math.sin( phi ) * Math.cos( theta );
-				// camera.target.y = 500 * Math.cos( phi );
-				// camera.target.z = 500 * Math.sin( phi ) * Math.sin( theta );
-				// camera.lookAt( camera.target );
-
 				camera.updateProjectionMatrix();
 				controls.update(dt);
 

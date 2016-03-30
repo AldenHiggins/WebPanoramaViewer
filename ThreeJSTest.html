@@ -1,16 +1,19 @@
 <!DOCTYPE html>
 <html lang="en">
 	<head>
-		<title>three.js webgl - equirectangular panorama</title>
+		<title>Kilograph 360 Viewer WebApp</title>
 		<meta charset="utf-8">
 		<meta name="viewport" content="width=device-width, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
 		<style>
-			body {
+			body 
+			{
 				background-color: #000000;
 				margin: 0px;
 				overflow: hidden;
 			}
-			#info {
+
+			#info
+			{
 				position: absolute;
 				top: 0px; width: 100%;
 				color: #ffffff;
@@ -20,7 +23,9 @@
 				font-weight: bold;
 				text-align:center;
 			}
-			a {
+
+			a
+			{
 				color: #ffffff;
 			}
 		</style>
@@ -28,7 +33,7 @@
 	<body>
 		<div id="container"></div>
 		<div id="info">
-			<a href="http://kilograph.net" target="_blank">Kilograph</a> 360 viewer demo <br />
+			<a href="http://kilograph.net" target="_blank">Kilograph</a> 360 Viewer Demo <br />
 		</div>
 
 		<script src="js/three.min.js"></script>
@@ -48,7 +53,7 @@
 
 			function init() 
 			{
-				var container, mesh;
+				var container, mesh;	
 				container = document.getElementById( 'container' );
 				// Set up the camera
 				camera = new THREE.PerspectiveCamera( 75, window.innerWidth / window.innerHeight, 1, 1100 );
@@ -98,6 +103,7 @@
 		        );
 		        controls.noPan = true;
 		        controls.noZoom = true;
+
 		        // Our preferred controls via DeviceOrientation
 		        function setOrientationControls(e)
 		        {

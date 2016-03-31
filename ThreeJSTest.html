@@ -24,6 +24,18 @@
 				text-align:center;
 			}
 
+			#fps
+			{
+				position: absolute;
+				top: 0px; width: 100%;
+				color: #ffffff;
+				padding: 5px;
+				font-family:Monospace;
+				font-size:13px;
+				font-weight: bold;
+				text-align: left;
+			}
+
 			a
 			{
 				color: #ffffff;
@@ -35,6 +47,7 @@
 		<div id="info">
 			<a href="http://kilograph.net" target="_blank">Kilograph</a> 360 Viewer Demo <br />
 		</div>
+		<div id="fps"></div>
 
 		<script src="js/three.min.js"></script>
 		<script src="js/OrbitControls.js"></script>
@@ -48,6 +61,16 @@
 			lon = 0, onMouseDownLon = 0,
 			lat = 0, onMouseDownLat = 0,
 			phi = 0, theta = 0;
+
+			// FPS stuff
+			var filterStrength = 20;
+			var frameTime = 0, lastLoop = new Date, thisLoop;
+			var fpsOut = document.getElementById('fps');
+			setInterval(function()
+			{
+			  fpsOut.innerHTML = (1000/frameTime).toFixed(1) + " fps";
+			}, 1000);
+
 			init();
 			animate();
 
@@ -87,11 +110,10 @@
 				// Set up the stereo effect using the renderer
 				effect = new THREE.StereoEffect( renderer );
 				effect.setSize( window.innerWidth, window.innerHeight );
+				container.appendChild( renderer.domElement );
 
 				// Set up a clock
 				clock = new THREE.Clock();
-
-				container.appendChild( renderer.domElement );
 
 				// Our initial control fallback with mouse/touch events in case DeviceOrientation is not enabled
 		        controls = new THREE.OrbitControls(camera, element);
@@ -261,6 +283,10 @@
 
 			function update(dt) 
 			{
+				var thisFrameTime = (thisLoop=new Date) - lastLoop;
+				frameTime += (thisFrameTime - frameTime) / filterStrength;
+				lastLoop = thisLoop;
+
 				camera.updateProjectionMatrix();
 				controls.update(dt);
 

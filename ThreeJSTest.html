@@ -66,6 +66,9 @@
 			// Performance Statistics
 			var stats = new Stats();
 			stats.setMode( 1 );
+			stats.domElement.style.position = 'absolute';
+			stats.domElement.style.left = '0px';
+			stats.domElement.style.top = '0px';
 			document.body.appendChild( stats.domElement );
 
 			// FPS stuff
@@ -289,6 +292,8 @@
 
 			function update(dt) 
 			{
+				stats.begin();
+
 				var thisFrameTime = (thisLoop=new Date) - lastLoop;
 				frameTime += (thisFrameTime - frameTime) / filterStrength;
 				lastLoop = thisLoop;
@@ -300,6 +305,8 @@
 				effect.render ( scene, camera );
 				// Rendering with the renderer is mono
 				// renderer.render( scene, camera );
+
+				stats.end();
 			}
 
 		</script>

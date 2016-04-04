@@ -2,7 +2,6 @@
 
 	<include url="skin/vtourskin.xml" />
 
-
 	<!-- customize skin settings: maps, gyro, thumbnails, tooltips, layout, design, ... -->
 	<skin_settings maps="[HAVEGPS]"
 	               maps_type="bing"
@@ -91,16 +90,5 @@
 				<cube url="images/test.tiles/mobile_%s.jpg" />
 			</mobile>
 		</image>
-<!-- 		<view hlookat="-1" vlookat="11" fovtype="MFOV" fov="120" maxpixelzoom="2.0" fovmin="70" fovmax="140" limitview="auto" />
-
-		<preview url="images/test.tiles/preview.jpg" />
-
-		<image type="CUBE" multires="false" tilesize="1024">
-			<cube url="images/test.tiles/pano_%s.jpg"/>
-		</image> -->
-
-		<!-- place your scene hotspots here -->
-
 	</scene>
-
 </krpano>

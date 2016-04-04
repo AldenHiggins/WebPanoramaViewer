@@ -91,4 +91,19 @@
 	        <down  url="images/C3View1/Down.jpg" />
 		</image>
 	</scene>
+
+	<scene name="TestPano2" title="C3 Test Pano numbah 2" onstart="" thumburl="images/test.tiles/preview.jpg" lat="39.56330333" lng="19.90445833" heading="0.0">
+		<view hlookat="0" vlookat="0" maxpixelzoom="1.0" fovmax="150" limitview="auto" />
+		
+		<preview url="images/test.tiles/preview.jpg" />
+
+		<image type="CUBE">
+			<left  url="images/C3View2/Left.jpg" />
+	        <front url="images/C3View2/Front.jpg" />
+	        <right url="images/C3View2/Right.jpg" />
+	        <back  url="images/C3View2/Back.jpg" />
+	        <up    url="images/C3View2/Up.jpg" />
+	        <down  url="images/C3View2/Down.jpg" />
+		</image>
+	</scene>
 </krpano>

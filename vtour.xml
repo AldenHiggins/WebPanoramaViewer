@@ -56,6 +56,16 @@
 		design_text_shadow="1"
 	/>
 
+	<plugin 
+		name="soundinterface"
+        url="plugins/soundinterface.swf"
+        alturl="plugins/soundinterface.js"
+        preload="true"
+        rootpath=""
+        volume="1.0"
+        mute="false"
+    />
+
 	<!--
 	    For an alternative skin design either change the <skin_settings> values 
 	    from above or optionally include one of the predefined designs from below.
@@ -77,6 +87,7 @@
 		if(startscene === null OR !scene[get(startscene)], copy(startscene,scene[0].name); );
 		loadscene(get(startscene), null, MERGE);
 		if(startactions !== null, startactions() );
+		playsound(bg, 'PartyAmbiance2.mp3');
 	</action>
 
 	<action name="goto">

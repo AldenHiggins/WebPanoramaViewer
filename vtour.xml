@@ -71,15 +71,21 @@
 
 	<!-- startup action - load the first pano/scene -->
 	<action name="startup" autorun="onstart">
+		set(start_ty, 75);
+		set(start_tt, 0.5);
+		callwith(hotspot[SampleHotspot], copy(ty,start_ty); tween(alpha|ty, 0.5|75, get(start_tt), easeOutQuad|easeOutQuint); );
 		if(startscene === null OR !scene[get(startscene)], copy(startscene,scene[0].name); );
 		loadscene(get(startscene), null, MERGE);
 		if(startactions !== null, startactions() );
 	</action>
 
+	<!-- Hotspot styles -->
+	<style name="arrowspot" url="images/blackArrow.png" distorted="true" vr_timeout="1000" oy="0" scale="1" />
+
 	<!-- Panorama scenes -->
 	<scene name="TestPano" title="C3 Test Pano" onstart="" thumburl="images/test.tiles/preview.jpg" lat="39.56330333" lng="19.90445833" heading="0.0">
 		<view hlookat="0" vlookat="0" maxpixelzoom="1.0" fovmax="150" limitview="auto" />
-		
+
 		<preview url="images/test.tiles/preview.jpg" />
 
 		<image type="CUBE">
@@ -90,6 +96,10 @@
 	        <up    url="images/C3View1/Up.jpg" />
 	        <down  url="images/C3View1/Down.jpg" />
 		</image>
+
+
+		<hotspot name="scene_galerie" style="arrowspot" ath="-66.1" atv="3.3" rotate="90"  depth="10000"/>
+
 	</scene>
 
 	<scene name="TestPano2" title="C3 Test Pano numbah 2" onstart="" thumburl="images/test.tiles/preview.jpg" lat="39.56330333" lng="19.90445833" heading="0.0">
@@ -106,4 +116,5 @@
 	        <down  url="images/C3View2/Down.jpg" />
 		</image>
 	</scene>
+
 </krpano>

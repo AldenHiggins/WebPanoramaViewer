@@ -87,7 +87,7 @@
 		if(startscene === null OR !scene[get(startscene)], copy(startscene,scene[0].name); );
 		loadscene(get(startscene), null, MERGE);
 		if(startactions !== null, startactions() );
-		playsound(bg, 'PartyAmbiance2.mp3');
+		<!-- playsound(bg, 'PartyAmbiance2.mp3'); -->
 	</action>
 
 	<action name="goto">
@@ -100,19 +100,16 @@
 	<style name="arrowspot" url="images/blackArrow.png" distorted="true" vr_timeout="1000" oy="0" scale="1" />
 
 	<!-- Scenes -->
-	<scene name="Bridge" title="Bridge" onstart="" thumburl="images/C3View1/Front.jpg" lat="39.56330333" lng="19.90445833" heading="0.0">
+	<scene name="Bridge" title="Bridge" onstart="" thumburl="images/C3View1L.tiles/pano_f.jpg" lat="39.56330333" lng="19.90445833" heading="0.0">
 		<view hlookat="0" vlookat="0" maxpixelzoom="1.0" fovmax="150" limitview="auto" />
 
-		<preview url="images/C3View1/Front.jpg" />
+		<preview url="images/C3View1L.tiles/pano_f.jpg" />
 
-		<image type="CUBE">
-			<left  url="images/C3View1/Left.jpg" />
-	        <front url="images/C3View1/Front.jpg" />
-	        <right url="images/C3View1/Right.jpg" />
-	        <back  url="images/C3View1/Back.jpg" />
-	        <up    url="images/C3View1/Up.jpg" />
-	        <down  url="images/C3View1/Down.jpg" />
+		<image stereo="true" stereolabels="L|R">
+			<cube url="images/C3View1%t.tiles/pano_%s.jpg" />
 		</image>
+
+		<hotspot name="BasicHotspot" style="arrowspot" ath="0.0" atv="0.0" rotate="90"  depth="10000" onclick="goto(Lobby);" />
 	</scene>
 
 	<scene name="Lobby" title="Lobby" onstart="" thumburl="images/C3View3/Front.jpg" lat="39.56330333" lng="19.90445833" heading="0.0">

@@ -167,6 +167,47 @@
 		  );
 	</action>
 
+	<events name="resizing-map" keep="true" onresize="adapt_map();"/>
+	<layer name="map" url="Map.jpg" keep="true" align="righttop" x="16" y="16" width="1024" height="prop" scale="0.2" handcursor="false" scalechildren="true" maskchildren="true" onclick="closemap();" onloaded="set(image_w,get(plugin[map].imagewidth));set(image_h,get(plugin[map].imageheight));set(map_loaded,true);adapt_map();">
+		<layer name="spot1" url="InvisibleBox.png" align="lefttop" edge="center" x="150" y="199" zorder="2" onclick="loadscene(scene_pano_sphere2, null, MERGE, BLEND(1));"/>
+<!-- 		<layer name="spot2" url="mappoint.png" align="lefttop" edge="center" x="650" y="500" zorder="2" onclick="loadscene(scene2, null, MERGE, BLEND(1));"/>
+		<layer name="spot3" url="mappoint.png" align="lefttop" edge="center" x="300" y="800" zorder="2" onclick="loadscene(scene3, null, MERGE, BLEND(1));"/> -->
+	</layer>
+	<action name="activatespot">
+		set(layer[radar].parent, layer[%1]); set(layer[radar].visible, true); set(layer[radar].heading, %2);
+	</action>
+	<action name="closemap">
+		set(layer[map].onclick, openmap() );
+		tween(layer[map].scale, 0.2);
+		set(events.onclick, null);
+		set(layer[map].align, "righttop")
+	</action>
+	<action name="openmap" devices="desktop">
+		set(layer[map].onclick, closemap() );
+		tween(layer[map].scale, 1.2);
+		set(layer[map].align, "center");
+		set(events.onclick, delayedcall(2, closemap()); );
+	</action>
+	<action name="openmap" devices="!desktop">
+		set(layer[map].onclick, closemap() );
+		tween(layer[map].scale, 1.2);
+	    set(events.onclick, delayedcall(2, closemap()); );
+	</action>
+	<action name="adapt_map">
+		if(map_loaded,div(map_expected_aspect,get(image_w),get(image_h));
+		div(screen_expected_aspect,stagewidth,stageheight);
+		fixaspectresize(map_expected_aspect,screen_expected_aspect););
+	</action>
+	<action name="fixaspectresize">
+		if(%2 LE %1,mul(new_plugin_width,stagewidth,0.8);
+		set(plugin[map].width,get(new_plugin_width));
+		set(plugin[map].height,prop);
+		,mul(new_plugin_height,stageheight,0.8);
+		set(plugin[map].height,get(new_plugin_height));
+		set(plugin[map].width,prop););
+	</action>
+
+
 	<!-- VR scene switching hotspots -->
 	<style name="webvr_menu_style" depth="800" scale="0.5" distorted="true" ath="0" atv="45" alpha="0.5" />
 	<hotspot name="webvr_prev_scene" keep="true" style="skin_base|webvr_menu_style" crop="0|64|64|64"  ox="-64" onover="tween(scale,0.6);" onout="tween(scale,0.5);" vr_timeout="750" onclick="skin_nextscene_loop(-1);" visible="false" devices="html5.and.webgl" />

@@ -76,8 +76,6 @@
 		loadscene(get(startscene), null, MERGE);
 		if(startactions !== null, startactions() );
 	</action>
-
-
 	
 	<scene name="scene_pano_sphere" title="Bridge" onstart="" thumburl="panos/Bridge.tiles/thumb.jpg" lat="" lng="" heading="">
 

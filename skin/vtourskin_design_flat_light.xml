@@ -5,7 +5,7 @@
 	<!-- modify the <skin_settings> values -->
 	<skin_settings title="false"
 	               layout_width="100%"
-	               layout_maxwidth="814"
+	               layout_maxwidth="823"
 	               controlbar_width="-24"
 	               controlbar_height="40"
 	               controlbar_offset.normal="20"

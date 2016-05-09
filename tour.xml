@@ -75,25 +75,32 @@
 		if(startscene === null OR !scene[get(startscene)], copy(startscene,scene[0].name); );
 		loadscene(get(startscene), null, MERGE);
 		if(startactions !== null, startactions() );
+		plugin[skin_gyro].enabled = true;
 	</action>
+
+	<style name="switchGlass" url="skin/SwitchGlass.png" distorted="true" vr_timeout="1000" oy="0" scale=".3" 
+	       tooltip=""
+	       onclick="if(linkedscene, set(enabled,false); skin_hidetooltips(); tween(depth|alpha|oy|rx, 4000|0.0|-50|-60, 0.5, default, loadscene(get(linkedscene),null,get(skin_settings.loadscene_flags),get(skin_settings.loadscene_blend)); skin_updatescroll(); ); );"
+	       onloaded="if(linkedscene AND skin_settings.tooltips_hotspots, copy(tooltip,scene[get(linkedscene)].title); loadstyle(skin_tooltips); );"
+	/>
 	
-	<scene name="scene_pano_sphere" title="Bridge" onstart="" thumburl="panos/Bridge.tiles/thumb.jpg" lat="" lng="" heading="">
+	<scene name="scene_pano_sphere" title="Bridge without Gradient Glass" onstart="" thumburl="panos/BridgeGlass.tiles/thumb.jpg" lat="" lng="" heading="">
 
 		<view hlookat="0" vlookat="0" fovtype="MFOV" fov="120" maxpixelzoom="2.0" fovmin="70" fovmax="140" limitview="auto" />
 
-		<preview url="panos/Bridge.tiles/preview.jpg" />
+		<preview url="panos/BridgeGlass.tiles/preview.jpg" />
 
 		<image>
-			<cube url="panos/Bridge.tiles/pano_%s.jpg" />
+			<cube url="panos/BridgeGlass.tiles/pano_%s.jpg" />
 			<mobile>
-				<cube url="panos/Bridge.tiles/mobile_%s.jpg" />
+				<cube url="panos/BridgeGlass.tiles/mobile_%s.jpg" />
 			</mobile>
 		</image>
 
 		<!-- place your scene hotspots here -->
-		<hotspot name="spot1" style="skin_hotspotstyle" ath="-45.112" atv="-1.598" linkedscene="scene_pano_sphere5" />
-		<hotspot name="spot2" style="skin_hotspotstyle" ath="-105.222" atv="51.730" linkedscene="scene_pano_sphere3" />
-
+		<hotspot name="spot1" style="skin_hotspotstyle" ath="-109.370" atv="51.086" linkedscene="scene_pano_sphere3" />
+		<hotspot name="spot2" style="skin_hotspotstyle" ath="-45.441" atv="-0.493" linkedscene="scene_pano_sphere5" />
+		<hotspot name="spot3" style="skin_hotspotstyle" ath="-45.441" atv="-0.493" linkedscene="scene_pano_sphere5" />
 	</scene>
 
 	<scene name="scene_pano_sphere2" title="Bridge with Gradient Glass" onstart="" thumburl="panos/BridgeGlass.tiles/thumb.jpg" lat="" lng="" heading="">
@@ -112,7 +119,7 @@
 		<!-- place your scene hotspots here -->
 		<hotspot name="spot1" style="skin_hotspotstyle" ath="-109.370" atv="51.086" linkedscene="scene_pano_sphere3" />
 		<hotspot name="spot2" style="skin_hotspotstyle" ath="-45.441" atv="-0.493" linkedscene="scene_pano_sphere5" />
-
+		<hotspot name="spot3" style="skin_hotspotstyle" ath="-45.441" atv="-0.493" linkedscene="scene_pano_sphere5" />
 	</scene>
 
 	<scene name="scene_pano_sphere3" title="Courtyard" onstart="" thumburl="panos/Courtyard.tiles/thumb.jpg" lat="" lng="" heading="">
@@ -129,7 +136,7 @@
 		</image>
 
 		<!-- place your scene hotspots here -->
-		<hotspot name="spot1" style="skin_hotspotstyle" ath="77.718" atv="-42.161" linkedscene="scene_pano_sphere" />
+		<hotspot name="spot1" style="skin_hotspotstyle" ath="77.718" atv="-42.161" linkedscene="scene_pano_sphere2" />
 		<hotspot name="spot2" style="skin_hotspotstyle" ath="29.750" atv="2.436" linkedscene="scene_pano_sphere4" />
 		<hotspot name="spot3" style="skin_hotspotstyle" ath="-21.220" atv="-21.932" linkedscene="scene_pano_sphere5" />
 
@@ -168,7 +175,7 @@
 		</image>
 
 		<!-- place your scene hotspots here -->
-		<hotspot name="spot1" style="skin_hotspotstyle" ath="-17.031" atv="2.924" linkedscene="scene_pano_sphere" />
+		<hotspot name="spot1" style="skin_hotspotstyle" ath="-17.031" atv="2.924" linkedscene="scene_pano_sphere2" />
 		<hotspot name="spot2" style="skin_hotspotstyle" ath="25.006" atv="36.347" linkedscene="scene_pano_sphere3" />
 		<hotspot name="spot3" style="skin_hotspotstyle" ath="-165.724" atv="7.249" linkedscene="scene_pano_sphere6" />
 

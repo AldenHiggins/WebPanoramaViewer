@@ -168,12 +168,42 @@
 	</action>
 
 	<events name="resizing-map" keep="true" onresize="adapt_map();"/>
-	<layer name="map" url="Map.png" keep="true" align="righttop" x="16" y="16" width="1024" height="prop" zorder="2" scale="0.2" handcursor="false" scalechildren="true" maskchildren="true" onclick="closemap();" onloaded="set(image_w,get(plugin[map].imagewidth));set(image_h,get(plugin[map].imageheight));set(map_loaded,true);adapt_map();" visible="false">
-		<layer name="spot1" url="InvisibleBox.png" align="lefttop" edge="center" x="150" y="350" zorder="3" onclick="loadscene(scene_pano_sphere6, null, MERGE, BLEND(1)); skin_showmap();"/>
-		<layer name="spot2" url="InvisibleBox.png" align="lefttop" edge="center" x="570" y="830" zorder="3" onclick="loadscene(scene_pano_sphere5, null, MERGE, BLEND(1)); skin_showmap();" />
-		<layer name="spot3" url="InvisibleBox.png" align="lefttop" edge="center" x="570" y="1000" zorder="3" onclick="loadscene(scene_pano_sphere4, null, MERGE, BLEND(1)); skin_showmap();"/>
-		<layer name="spot4" url="InvisibleBox.png" align="lefttop" edge="center" x="1350" y="650" zorder="3" onclick="loadscene(scene_pano_sphere, null, MERGE, BLEND(1)); skin_showmap();"/>
-		<layer name="spot5" url="InvisibleBox.png" align="lefttop" edge="center" x="1370" y="1130" zorder="3" onclick="loadscene(scene_pano_sphere3, null, MERGE, BLEND(1)); skin_showmap();"/>
+	<layer name="map" url="Map.png" keep="true" align="righttop" x="16" y="16" width="1024" height="prop" zorder="2" scale="0.2" handcursor="false" scalechildren="true" maskchildren="true" onclick="skin_showmap();" onloaded="set(image_w,get(plugin[map].imagewidth));set(image_h,get(plugin[map].imageheight));set(map_loaded,true);adapt_map();" visible="false">
+		<!-- 150, 149 -->
+		<!-- 0, 191 -->
+		<layer name="spot1" url="WBalconyHighlight.png" align="lefttop" edge="center" x="150" y="340" zorder="3" onclick="loadscene(scene_pano_sphere7, null, MERGE, BLEND(1)); skin_showmap();"
+	       onover.mouse="set(layer[spot1].url, 'skin/WBalconyYellow.png')"
+	       onout.mouse="set(layer[spot1].url, 'skin/WBalconyHighlight.png')"
+       	/>
+       	<!-- 83, 261 -->
+		<layer name="spot6" url="OfficeHighlight.png" align="lefttop" edge="center" x="233" y="410" zorder="4" onclick="loadscene(scene_pano_sphere6, null, MERGE, BLEND(1)); skin_showmap();"
+		   onover.mouse="set(layer[spot6].url, 'skin/OfficeYellow.png')"
+	       onout.mouse="set(layer[spot6].url, 'skinOfficeHighlight.png')"
+		/>
+
+		<!-- 397, 564 -->
+		<layer name="spot2" url="EBalconyHighlight.png" align="lefttop" edge="center" x="547" y="713" zorder="3" onclick="loadscene(scene_pano_sphere5, null, MERGE, BLEND(1)); skin_showmap();" 
+		   onover.mouse="set(layer[spot2].url, 'skin/EBalconyYellow.png')"
+	       onout.mouse="set(layer[spot2].url, 'skin/EBalconyHighlight.png')"
+		/>
+		
+		<!-- 450, 892 -->
+		<layer name="spot3" url="LobbyHighlight.png" align="lefttop" edge="center" x="600" y="1041" zorder="3" onclick="loadscene(scene_pano_sphere4, null, MERGE, BLEND(1)); skin_showmap();"
+		   onover.mouse="set(layer[spot3].url, 'skin/LobbyYellow.png')"
+	       onout.mouse="set(layer[spot3].url, 'skin/LobbyHighlight.png')"
+		/>
+		
+<!-- 		<!-- 1231, 528 -->
+		<layer name="spot4" url="BridgeHighlight.png" align="lefttop" edge="center" x="1381" y="677" zorder="3" onclick="loadscene(scene_pano_sphere2, null, MERGE, BLEND(1)); skin_showmap();"
+		   onover.mouse="set(layer[spot4].url, 'skin/BridgeYellow.png')"
+	       onout.mouse="set(layer[spot4].url, 'skin/BridgeHighlight.png')"
+		/> -->
+		
+		<!-- 1214, 990 -->
+		<layer name="spot5" url="CourtyardHighlight.png" align="lefttop" edge="center" x="1364" y="1139" zorder="3" onclick="loadscene(scene_pano_sphere3, null, MERGE, BLEND(1)); skin_showmap();"
+		   onover.mouse="set(layer[spot5].url, 'skin/CourtyardYellow.png')"
+	       onout.mouse="set(layer[spot5].url, 'skin/CourtyardHighlight.png')"
+		/>
 
 <!-- 		<layer name="spot2" url="mappoint.png" align="lefttop" edge="center" x="650" y="500" zorder="2" onclick="loadscene(scene2, null, MERGE, BLEND(1));"/>
 		<layer name="spot3" url="mappoint.png" align="lefttop" edge="center" x="300" y="800" zorder="2" onclick="loadscene(scene3, null, MERGE, BLEND(1));"/> -->
@@ -195,14 +225,16 @@
 		set(layer[map].align, "center");
 		set(layer[map].x, "10");
 		set(layer[map].y, "0");
-		set(events.onclick, delayedcall(2, closemap()); );
+		set(events.onclick, skin_showmap(); );
 	</action>
 	<action name="openmap" devices="!desktop">
 		set(layer[map].visible, true);
 		set(layer[map].onclick, skin_showmap() );
-		tween(layer[map].scale, 1.0);
+		tween(layer[map].scale, 0.93);
 		set(layer[map].align, "center");
-		set(events.onclick, delayedcall(2, closemap()); );
+		set(layer[map].x, "10");
+		set(layer[map].y, "0");
+		set(events.onclick, delayedcall(.5, skin_showmap()); );
 	</action>
 	<action name="adapt_map">
 		if(map_loaded,div(map_expected_aspect,get(image_w),get(image_h));

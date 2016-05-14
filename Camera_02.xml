@@ -1,0 +1,38 @@
+<krpano version="1.18">
+	
+	<!-- the skin -->
+	<include url="skin/defaultskin.xml" />
+	
+	<!-- view settings -->
+	<view hlookat="0" vlookat="0" maxpixelzoom="1.0" fovmax="150" limitview="auto" />
+	
+
+	<preview url="Camera_02.tiles/preview.jpg" />
+
+	<image>
+		<cube url="Camera_02.tiles/pano_%s.jpg" />
+		<mobile>
+			<cube url="Camera_02.tiles/mobile_%s.jpg" />
+		</mobile>
+	</image>
+
+
+	<!--  -->
+<!-- 	<hotspot 
+			name="endFrameOverlay"
+	     	url="skin/OverlayTesting.jpg" 
+	     	distorted="true"
+	     	ath="0"
+	     	atv="0"
+	     	width="260.4166666"
+	     	height="260.4166666"
+	     	edge="lefttop"
+	     	ox="78.125"
+	     	oy="-434.8958333" 
+	     	alpha="0.0"
+	     	onover="tween(alpha,1.0);"
+	     	onout="tween(alpha,0.0);"
+	     	capture="false"
+ 	/> -->
+
+</krpano>

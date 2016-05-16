@@ -1,221 +1,133 @@
-<krpano version="1.19" title="Virtual Tour">
-
+﻿<krpano version="1.19" title="Virtual Tour">
 	<include url="skin/vtourskin.xml" />
 
+	<!-- customize skin settings: maps, gyro, webvr, thumbnails, tooltips, layout, design, ... -->
+	<skin_settings 
+		maps="false"
+		maps_type="bing"
+		maps_bing_api_key=""
+		maps_zoombuttons="false"
+		gyro="true"
+		webvr="true"
+		littleplanetintro="false"
+		title="true"
+		thumbs="true"
+		thumbs_width="120" 
+		thumbs_height="80"
+		thumbs_padding="10" 
+		thumbs_crop="0|40|240|160"
+		thumbs_opened="false"
+		thumbs_text="false"
+		thumbs_dragging="true"
+		thumbs_onhoverscrolling="false"
+		thumbs_scrollbuttons="false"
+		thumbs_scrollindicator="false"
+		thumbs_loop="false"
+		tooltips_buttons="false"
+		tooltips_thumbs="false"
+		tooltips_hotspots="false"
+		tooltips_mapspots="false"
+		deeplinking="false"
+		loadscene_flags="MERGE"
+		loadscene_blend="OPENBLEND(0.5, 0.0, 0.75, 0.05, linear)"
+		loadscene_blend_prev="SLIDEBLEND(0.5, 180, 0.75, linear)"
+		loadscene_blend_next="SLIDEBLEND(0.5,   0, 0.75, linear)"
+		loadingtext="loading..."
+		layout_width="100%"
+		layout_maxwidth="814"
+		controlbar_width="-24"
+		controlbar_height="40"
+		controlbar_offset="20"
+		controlbar_offset_closed="-40"
+		controlbar_overlap.no-fractionalscaling="10"
+		controlbar_overlap.fractionalscaling="0"
+		design_skin_images="vtourskin.png"
+		design_bgcolor="0x2D3E50"
+		design_bgalpha="0.8"
+		design_bgborder="0"
+		design_bgroundedge="1"
+		design_bgshadow="0 4 10 0x000000 0.3"
+		design_thumbborder_bgborder="3 0xFFFFFF 1.0"
+		design_thumbborder_padding="2"
+		design_thumbborder_bgroundedge="0"
+		design_text_css="color:#FFFFFF; font-family:Arial;"
+		design_text_shadow="1"
+    />
 
-	<!-- customize skin settings: maps, gyro, thumbnails, tooltips, layout, design, ... -->
-	<skin_settings maps="false"
-	               maps_type="bing"
-	               maps_bing_api_key=""
-	               maps_zoombuttons="false"
-	               gyro="true"
-	               littleplanetintro="false"
-	               title="true"
-	               thumbs="true"
-	               thumbs_width="120" thumbs_height="80" thumbs_padding="10" thumbs_crop="0|40|240|160"
-	               thumbs_opened="false"
-	               thumbs_text="false"
-	               thumbs_dragging="true"
-	               thumbs_onhoverscrolling="false"
-	               thumbs_scrollbuttons="false"
-	               thumbs_scrollindicator="false"
-	               thumbs_loop="false"
-	               tooltips_buttons="false"
-	               tooltips_thumbs="false"
-	               tooltips_hotspots="false"
-	               tooltips_mapspots="false"
-	               deeplinking="false"
-	               loadscene_flags="MERGE"
-	               loadscene_blend="OPENBLEND(0.5, 0.0, 0.75, 0.05, linear)"
-	               loadscene_blend_prev="SLIDEBLEND(0.5, 180, 0.75, linear)"
-	               loadscene_blend_next="SLIDEBLEND(0.5,   0, 0.75, linear)"
-	               loadingtext="loading..."
-	               layout_width="100%"
-	               layout_maxwidth.normal="900"
-	               layout_maxwidth.mobile=""
-	               controlbar_width.normal="-44"
-	               controlbar_width.mobile="100%"
-	               controlbar_height.normal="38"
-	               controlbar_height.mobile="34"
-	               controlbar_offset.normal="22"
-	               controlbar_offset.mobile="0"
-	               controlbar_offset_closed="-40"
-	               controlbar_overlap.normal="7"
-	               controlbar_overlap.mobile="2"
-	               design_skin_images="vtourskin.png"
-	               design_bgcolor="0x000000"
-	               design_bgalpha="0.5"
-	               design_bgborder="0 0xFFFFFF 1.0"
-	               design_bgroundedge.normal="9"
-	               design_bgroundedge.mobile="1"
-	               design_bgshadow="0 0 9 0xFFFFFF 0.5"
-	               design_thumbborder_bgborder="4 0xFFFFFF 1.0"
-	               design_thumbborder_padding="2"
-	               design_thumbborder_bgroundedge="5"
-	               design_text_css="color:#FFFFFF; font-family:Arial; font-weight:bold;"
-	               design_text_shadow="1"
-	               />
-
-	<!--
-	    For an alternative skin design either change the <skin_settings> values 
-	    from above or optionally include one of the predefined designs from below.
-	    Either by removing the 'xml-if-check' from the particular <include> element
-	    or by adding e.g. initvar:{design:'flat_light'} to the embedpano() call in
-	    the html file:
-	-->
-	<include url="skin/vtourskin_design_glass.xml"       if="design === 'glass'"       />
-	<include url="skin/vtourskin_design_flat.xml"        if="design === 'flat'"        />
-	<include url="skin/vtourskin_design_flat_light.xml"  if="design === 'flat_light'"  />
-	<include url="skin/vtourskin_design_ultra_light.xml" if="design === 'ultra_light'" />
-	<include url="skin/vtourskin_design_117.xml"         if="design === '117'"         />
-
-
-	<!-- startup action - load the first pano/scene -->
+	<!-- startup action - load the first scene -->
 	<action name="startup" autorun="onstart">
-		<!-- showlog(true); -->
+		showlog(true);
+		trace("Starting up");
 		if(startscene === null OR !scene[get(startscene)], copy(startscene,scene[0].name); );
 		loadscene(get(startscene), null, MERGE);
 		if(startactions !== null, startactions() );
 		asyncloop(true, updateFunction() );
+		createHotspots();
+	</action>
+
+	<action name="createHotspots">
+		for (set(hotspotIndex, 1), hotspotIndex LT 9, inc(hotspotIndex),
+			<!-- Generate the hotspot name -->
+			set(hotspotName, "overlay");
+			txtadd(hotspotName, get(hotspotName), get(hotspotIndex));
+
+			<!-- Figure out what image file we're going to get the hotspot from -->
+			set(imageName, "skin/testOverlay");
+			txtadd(imageName, get(imageName), get(hotspotIndex), ".jpg");
+
+			<!-- Calculate the x position of the hotspot -->
+			set(xValue, -113.4969);
+			set(addThis, 76.6);
+			set(multiplyIndex, get(hotspotIndex));
+			sub(multiplyIndex, 1);
+			mul(addThis, multiplyIndex);
+			add(xValue, addThis);
+
+			addhotspot(get(hotspotName));
+			set(hotspot[get(hotspotName)].url, get(imageName));
+			set(hotspot[get(hotspotName)].ox, get(xValue));
+			set(hotspot[get(hotspotName)].oy, "-301.3806");
+			set(hotspot[get(hotspotName)].ath, "-90");
+			set(hotspot[get(hotspotName)].atv, "0");
+			set(hotspot[get(hotspotName)].distorted, "true");
+			set(hotspot[get(hotspotName)].edge, "lefttop");
+			set(hotspot[get(hotspotName)].capture, "false");
+			set(hotspot[get(hotspotName)].visible, "true");
+			set(hotspot[get(hotspotName)].keep, "true");
+			set(hotspot[get(hotspotName)].scale, "1.0");
+			set(hotspot[get(hotspotName)].width, "76.6871");
+			set(hotspot[get(hotspotName)].height, "613.4969");
+		);		
 	</action>
 
 	<action name="updateFunction">
 		set(viewH, get(view.hlookat));
 
-		<!-- trace(viewH); -->
+		if (viewH LT 0, add(viewH, 360););
 
-		if (viewH LT -95.0,  set(hotspot[testOverlay1].alpha, "0.0");, set(hotspot[testOverlay1].alpha, "1.0"););
-		if (viewH LT -85.0,  set(hotspot[testOverlay2].alpha, "0.0");, set(hotspot[testOverlay2].alpha, "1.0"););
-		if (viewH LT -75.0,  set(hotspot[testOverlay3].alpha, "0.0");, set(hotspot[testOverlay3].alpha, "1.0"););
-		if (viewH LT -65.0,  set(hotspot[testOverlay4].alpha, "0.0");, set(hotspot[testOverlay4].alpha, "1.0"););
-		if (viewH LT -55.0,  set(hotspot[testOverlay5].alpha, "0.0");, set(hotspot[testOverlay5].alpha, "1.0"););
-		if (viewH LT -45.0,  set(hotspot[testOverlay6].alpha, "0.0");, set(hotspot[testOverlay6].alpha, "1.0"););
-		if (viewH LT -35.0,  set(hotspot[testOverlay7].alpha, "0.0");, set(hotspot[testOverlay7].alpha, "1.0"););
-		if (viewH LT -25.0,  set(hotspot[testOverlay8].alpha, "0.0");, set(hotspot[testOverlay8].alpha, "1.0"););
+		for (set(hotspotIndex, 1), hotspotIndex LT 9, inc(hotspotIndex),
+			set(hotspotName, "overlay");
+			txtadd(hotspotName, get(hotspotName), get(hotspotIndex));
+
+			set(checkingAngle, 265);
+			sub(addToAngle, get(hotspotIndex), 1);
+			mul(addToAngle, 10);
+			add(checkingAngle, get(addToAngle));
+
+			if (viewH GT checkingAngle, set(hotspot[get(hotspotName)].alpha, "0.0");, set(hotspot[get(hotspotName)].alpha, "1.0"););
+		);
 	</action>
-
-	<style
-		name="OverlayStyle"
-		distorted="true"
-		edge="lefttop"
-     	alpha="1.0"
-     	capture="false"
-     	visible="true"
-     	zorder="90"
-     	keep="true"
-     	depth="1000"
-     	scale="1.0"
-	/>
-
-	<scene name="scene_Camera_02" title="Camera_02" onstart="" thumburl="panos/Camera_02.tiles/thumb.jpg" lat="" lng="" heading="">
+	
+	<scene name="scene_pano" title="pano" onstart="" thumburl="panos/pano.tiles/thumb.jpg" lat="" lng="" heading="">
 
 		<view hlookat="0" vlookat="0" fovtype="MFOV" fov="120" maxpixelzoom="2.0" fovmin="70" fovmax="140" limitview="auto" />
 
-		<preview url="panos/Camera_02.tiles/preview.jpg" />
+		<preview url="panos/pano.tiles/preview.jpg" />
 
 		<image>
-			<cube url="panos/Camera_02.tiles/pano_%s.jpg" />
-			<mobile>
-				<cube url="panos/Camera_02.tiles/mobile_%s.jpg" />
-			</mobile>
+			<cube url="panos/pano.tiles/pano_%s.jpg" />
+
+			<cube url="panos/pano.tiles/mobile/pano_%s.jpg" devices="mobile" />
 		</image>
-
-		<!-- place your scene hotspots here -->
-		<hotspot 
-			name="testOverlay1"
-	     	url="skin/testOverlay1.jpg" 
-	     	style="OverlayStyle"
-	     	ath="-90"
-	     	atv="0"
-	     	width="76.6871"
-	     	height="613.4969"
-	     	ox="-113.4969"
-	     	oy="-301.3806"
-	 	/>
-
-		<hotspot 
-			name="testOverlay2"
-	     	url="skin/testOverlay2.jpg" 
-	     	style="OverlayStyle"
-	     	ath="-90"
-	     	atv="0"
-	     	width="76.6871"
-	     	height="613.4969"
-	     	ox="-36.8969"
-	     	oy="-301.3806" 
-	 	/>
-
-		<hotspot 
-			name="testOverlay3"
-	     	url="skin/testOverlay3.jpg" 
-	     	style="OverlayStyle"
-	     	ath="-90"
-	     	atv="0"
-	     	width="76.6871"
-	     	height="613.4969"
-	     	ox="39.7031"
-	     	oy="-301.3806" 
-	 	/>
-
-		<hotspot 
-			name="testOverlay4"
-	     	url="skin/testOverlay4.jpg" 
-	     	style="OverlayStyle"
-	     	ath="-90"
-	     	atv="0"
-	     	width="76.6871"
-	     	height="613.4969"
-	     	ox="116.3031"
-	     	oy="-301.3806" 
-	 	/>
-
-		<hotspot 
-			name="testOverlay5"
-	     	url="skin/testOverlay5.jpg" 
-	     	style="OverlayStyle"
-	     	ath="-90"
-	     	atv="0"
-	     	width="76.6871"
-	     	height="613.4969"
-	     	ox="192.9031"
-	     	oy="-301.3806" 
-	 	/>
-
-		<hotspot 
-			name="testOverlay6"
-	     	url="skin/testOverlay6.jpg" 
-	     	style="OverlayStyle"
-	     	ath="-90"
-	     	atv="0"
-	     	width="76.6871"
-	     	height="613.4969"
-	     	ox="269.5031"
-	     	oy="-301.3806" 
-	 	/>
-
-		<hotspot 
-			name="testOverlay7"
-	     	url="skin/testOverlay7.jpg" 
-	     	style="OverlayStyle"
-	     	ath="-90"
-	     	atv="0"
-	     	width="76.6871"
-	     	height="613.4969"
-	     	ox="346.1031"
-	     	oy="-301.3806" 
-	 	/>
-
-		<hotspot 
-			name="testOverlay8"
-	     	url="skin/testOverlay8.jpg" 
-	     	style="OverlayStyle"
-	     	ath="-90"
-	     	atv="0"
-	     	width="76.6871"
-	     	height="613.4969"
-	     	ox="422.7031"
-	     	oy="-301.3806" 
-	 	/>
-
 	</scene>
 </krpano>

@@ -1,10 +1,9 @@
-<krpano>
+﻿<krpano>
 
 	<!-- Glass Design -->
 
 	<!-- modify the <skin_settings> values -->
-	<skin_settings title="false"
-	               thumbs_scrollindicator="true"
+	<skin_settings thumbs_scrollindicator="true"
 	               layout_width="100%"
 	               layout_maxwidth="680"
 	               xcontrolbar_width="-44"
@@ -36,6 +35,6 @@
 	       />
 
 	<!-- contextmenu style (adjust to match skin style) -->
-	<contextmenu customstyle.touch="default|default|default|0x77AAAAAA|0xFFFFFF|0xBBBBBB|2|0x7FFFFFFF|13|0|0|0|0xFFFFFF|0|0|4|6|7|0xAAFFFFFF|none|3|0|0|0|3|0xAAFFFFFF|0xAAFFFFFF|0xFFFFFF|12|8" />
+	<contextmenu customstyle="default|default|default|0x77AAAAAA|0xFFFFFF|0xBBBBBB|2|0x7FFFFFFF|13|0|0|0|0xFFFFFF|0|0|4|6|7|0xAAFFFFFF|none|3|0|0|0|3|0xAAFFFFFF|0xAAFFFFFF|0xFFFFFF|12|8" />
 
 </krpano>

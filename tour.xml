@@ -72,7 +72,7 @@
 
 	<!-- startup action - load the first pano/scene -->
 	<action name="startup" autorun="onstart">
-		showlog(true);
+		<!-- showlog(true); -->
 		if(startscene === null OR !scene[get(startscene)], copy(startscene,scene[0].name); );
 		loadscene(get(startscene), null, MERGE);
 		if(startactions !== null, startactions() );
@@ -82,24 +82,16 @@
 	<action name="updateFunction">
 		set(viewH, get(view.hlookat));
 
-		trace(viewH);
+		<!-- trace(viewH); -->
 
 		if (viewH LT -95.0,  set(hotspot[testOverlay1].alpha, "0.0");, set(hotspot[testOverlay1].alpha, "1.0"););
-
 		if (viewH LT -85.0,  set(hotspot[testOverlay2].alpha, "0.0");, set(hotspot[testOverlay2].alpha, "1.0"););
-
 		if (viewH LT -75.0,  set(hotspot[testOverlay3].alpha, "0.0");, set(hotspot[testOverlay3].alpha, "1.0"););
-
 		if (viewH LT -65.0,  set(hotspot[testOverlay4].alpha, "0.0");, set(hotspot[testOverlay4].alpha, "1.0"););
-
 		if (viewH LT -55.0,  set(hotspot[testOverlay5].alpha, "0.0");, set(hotspot[testOverlay5].alpha, "1.0"););
-
 		if (viewH LT -45.0,  set(hotspot[testOverlay6].alpha, "0.0");, set(hotspot[testOverlay6].alpha, "1.0"););
-
 		if (viewH LT -35.0,  set(hotspot[testOverlay7].alpha, "0.0");, set(hotspot[testOverlay7].alpha, "1.0"););
-
 		if (viewH LT -25.0,  set(hotspot[testOverlay8].alpha, "0.0");, set(hotspot[testOverlay8].alpha, "1.0"););
-
 	</action>
 
 	<style
@@ -111,6 +103,8 @@
      	visible="true"
      	zorder="90"
      	keep="true"
+     	depth="1000"
+     	scale="1.0"
 	/>
 
 	<scene name="scene_Camera_02" title="Camera_02" onstart="" thumburl="panos/Camera_02.tiles/thumb.jpg" lat="" lng="" heading="">
@@ -224,6 +218,4 @@
 	 	/>
 
 	</scene>
-
-
 </krpano>

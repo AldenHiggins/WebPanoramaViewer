@@ -56,7 +56,7 @@
 
 	<!-- startup action - load the first scene -->
 	<action name="startup" autorun="onstart">
-		showlog(true);
+		<!-- showlog(true); -->
 		trace("Starting up");
 		if(startscene === null OR !scene[get(startscene)], copy(startscene,scene[0].name); );
 		loadscene(get(startscene), null, MERGE);
@@ -102,6 +102,8 @@
 
 	<action name="updateFunction">
 		set(viewH, get(view.hlookat));
+
+		mod(viewH, 360);
 
 		if (viewH LT 0, add(viewH, 360););
 

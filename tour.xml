@@ -54,12 +54,20 @@
 		design_text_shadow="1"
     />
 
+	<plugin name="soundinterface"
+	        url="%SWFPATH%/plugins/soundinterface.swf"
+	        alturl="%SWFPATH%/plugins/soundinterface.js"
+	        rootpath="%CURRENTXML%"
+	        onloaded="playsound(bgsnd, 'CLICK.WAV', 0);" 
+    />
+
 	<!-- startup action - load the first scene -->
 	<action name="startup" autorun="onstart">
-		<!-- showlog(true); -->
+		showlog(true);
 		trace("Starting up");
 		if(startscene === null OR !scene[get(startscene)], copy(startscene,scene[0].name); );
 		loadscene(get(startscene), null, MERGE);
+		<!-- set(plugin["soundinterface"].onloaded, startSounds()); -->
 		if(startactions !== null, startactions() );
 		asyncloop(true, updateFunction() );
 		createHotspots();
@@ -118,6 +126,20 @@
 
 			if (viewH GT checkingAngle, set(hotspot[get(hotspotName)].alpha, "0.0");, set(hotspot[get(hotspotName)].alpha, "1.0"););
 		);
+
+		sub(difference, 180, get(viewH));
+
+<!-- 		trace("Diff:");
+		trace(difference); -->
+
+		<!-- if (difference GT -30 && difference LT 30, playsound("ParkingAmbiance", "ParkingGarage.wav", 0);); -->
+
+		<!-- if (viewH GT -30 && viewH LT 30, playsound("CityAmbiance", "CityAtmosphere.wav", 0);); -->
+	</action>
+
+	<action name="startSounds">
+		trace("Starting sounds");
+		<!-- playsound("CityAmbiance", "CityAtmosphere.wav", 0); -->
 	</action>
 	
 	<scene name="scene_pano" title="pano" onstart="" thumburl="panos/pano.tiles/thumb.jpg" lat="" lng="" heading="">

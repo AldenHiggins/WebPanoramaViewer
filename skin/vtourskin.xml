@@ -540,6 +540,7 @@
 		calc(show_gyrobutton, plugin[skin_gyro].available == true AND view.vlookatrange == 180 );
 		calc(show_vrbutton,   webvr.isavailable == true);
 		if (device.desktop, calc(show_vrbutton, false););
+		if (device.tablet, calc(show_vrbutton, false););
 		calc(show_fsbutton,   device.fullscreensupport == true);
 
 		set(lpos,6);
@@ -547,10 +548,6 @@
 		if(show_gyrobutton, dec(cpos,20));
 		if(show_vrbutton, dec(cpos,24));
 		set(rpos,6);
-
-<!-- 		calc(show_dirbuttons, !device.mobile AND ((area.pixelwidth + 2*cpos) GT 520));
-
-		copy(layer[skin_btn_navi].visible, show_dirbuttons); -->
 
 		copy(layer[skin_btn_prev].visible, show_selbuttons);
 		copy(layer[skin_btn_next].visible, show_selbuttons);
@@ -564,10 +561,8 @@
 		copy(layer[skin_btn_map].x, lpos);
 		if(show_mapbutton, inc(lpos,40));
 
-		if(!device.mobile,
-<!-- 			copy(layer[skin_btn_navi].x, cpos);
-			inc(cpos,140); -->
-
+		if(device.desktop
+			,
 			set(layer[skin_btn_gyro].align, center);
 			copy(layer[skin_btn_gyro].visible, show_gyrobutton);
 			copy(layer[skin_btn_gyro].x, cpos);
@@ -577,7 +572,7 @@
 			copy(layer[skin_btn_vr].visible, show_vrbutton);
 			copy(layer[skin_btn_vr].x, cpos);
 			if(show_vrbutton, inc(cpos,80));
-		  ,
+			,
 			set(layer[skin_btn_gyro].align, left);
 			copy(layer[skin_btn_gyro].visible, show_gyrobutton);
 			copy(layer[skin_btn_gyro].x, lpos);
@@ -587,7 +582,7 @@
 			copy(layer[skin_btn_vr].visible, show_vrbutton);
 			copy(layer[skin_btn_vr].x, lpos);
 			if(show_vrbutton, inc(lpos,80));
-		  );
+		);
 
 		copy(layer[skin_btn_hide].x, rpos);
 		inc(rpos,40);
@@ -1030,19 +1025,12 @@
 		  );
 	</action>
 
-
-	<!-- context menu - http://krpano.com/docu/xml/#contextmenu -->
-	<contextmenu>
-		<item name="kr" caption="KRPANO"     />
-		<item name="fs" caption="FULLSCREEN" />
-		<item name="cc" caption="Change Controlmode" onclick="skin_changecontrolmode();"  separator="true" />
-		<item name="nv" caption="Normal View"        onclick="skin_view_normal();"        showif="view.vlookatrange == 180" separator="true"      />
-		<item name="fv" caption="Fisheye View"       onclick="skin_view_fisheye();"       showif="view.vlookatrange == 180" devices="flash|webgl" />
-		<item name="sv" caption="Stereographic View" onclick="skin_view_stereographic();" showif="view.vlookatrange == 180" devices="flash|webgl" />
-		<item name="av" caption="Architectural View" onclick="skin_view_architectural();" showif="view.vlookatrange == 180"                       />
-		<item name="pv" caption="Pannini View"       onclick="skin_view_pannini();"       showif="view.vlookatrange == 180" devices="flash|webgl" />
-		<item name="lp" caption="Little Planet View" onclick="skin_view_littleplanet();"  showif="view.vlookatrange == 180" devices="flash|webgl" />
-	</contextmenu>
+	<!--  ************  -->
+	<!--  Context Menu  -->
+	<!--  ************  -->
+	<contextmenu fullscreen="false"></contextmenu>
+	<events name="contextmenuevents" keep="true" onenterfullscreen="updateContextMenu" onexitfullscreen="updateContextMenu" onxmlcomplete="updateContextMenu"/>
+	<action name="updateContextMenu"></action>
 
 
 	<action name="skin_changecontrolmode">

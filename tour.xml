@@ -3,18 +3,15 @@
 
 	<!-- startup action - load the first scene -->
 	<action name="startup" autorun="onstart">
-		showlog(true);
+		<!-- showlog(true); -->
 		if(startscene === null OR !scene[get(startscene)], copy(startscene,scene[0].name); );
 		loadscene(get(startscene), null, MERGE);
 		createGifs();
 	</action>
 
 	<action name="createGifs">
- 		<!-- Set up the sunset GIF -->
 		createGifHotspot("SunsetUI", "gifs/NewSunset/SpriteSheet", 460, 260, 736, 577, 1536, 0, "true", 1, 1.126, .75, 15, "scene_sunset360");
-		<!-- Set up the visit the office GIF -->
 		createGifHotspot("OfficeUI", "gifs/VisitOfficeRedesign/SpriteSheet", 100, 620, 828, 1024, 1536, 0, "true", .449, .449, .35, 15, "scene_office360");
-		<!-- Create the watch us work GIF -->
 		createGifHotspot("VRUI", "gifs/NewVR/SpriteSheet", -200, 860, 600, 600, 1536, 1, "true", 1, 1, .9, 15, "scene_watchUsWork360");
 	</action>
 
@@ -131,7 +128,8 @@
 		set(crop, '0|0|%1|%2');
 
 		setinterval(calc('crop_anim_' + name), calc(1.0 / %3),
-			if(loaded,
+			if(loaded
+				,
 				inc(frame);
 				if(frame GE frames, if(onlastframe !== null, onlastframe() ); set(frame,0); );
 				mod(xpos, frame, xframes);
@@ -140,10 +138,10 @@
 				mul(xpos, %1);
 				mul(ypos, %2);
 				calc(crop, xpos + '|' + ypos + '|%1|%2');
-			  ,
+			    ,
 				clearinterval(calc('crop_anim_' + name));
-			  );
-		  );
+			);
+		);
 	</action>
 	
 	<scene name="scene_pano" title="Cabin" onstart="showHideHotspots('true')" thumburl="panos/pano.tiles/thumb.jpg" lat="" lng="" heading="">

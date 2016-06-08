@@ -6,7 +6,6 @@
 		<!-- showlog(true); -->
 		if(startscene === null OR !scene[get(startscene)], copy(startscene,scene[0].name); );
 		loadscene(get(startscene), null, MERGE);
-		if(startactions !== null, startactions() );
 		createGifs();
 	</action>
 
@@ -49,20 +48,29 @@
 		createGifHotspots("VRUI", get(imageName), -200, 860, 600, 600, 1536, 180, 0, "true", calc(600 * scaleFactor), calc(600 * scaleFactor), 15, "scene_watchUsWork360");
 	</action>
 
+	<!-- 
+		Parameters:
+		hotspotName, %1
+		imageName, %2
+		xPosition, %3
+		yPosition, %4
+		width, %5
+		height, %6
+		originalCubeSize, %7
+		ath, %8
+		atv, %9
+		visibility, %10
+		cubeWidth, %11
+		cubeHeight, %12
+		frameRate, %13
+		sceneTheHotspotPointsTo, %14
+	 -->
 	<action name="createGifHotspots">
-		set(hotspotName, %1);
-		set(imageName, %2);
 		set(xPosition, %3);
 		set(yPosition, %4);
 		set(width, %5);
 		set(height, %6);
 		set(originalCubeSize, %7);
-		set(ath, %8);
-		set(atv, %9);
-		set(visibility, %10);
-		set(cubeWidth, %11);
-		set(cubeHeight, %12);
-		set(frameRate, %13);
 
 		<!-- Calculate the width/height of the hotspot -->
 		mul(width, 1000);
@@ -81,29 +89,29 @@
 		sub(yPosition, 500);
 
 		<!-- Create the hotspot -->
-		addhotspot(get(hotspotName));
-		set(hotspot[get(hotspotName)].url, get(imageName));
-		set(hotspot[get(hotspotName)].ox, get(xPosition));
-		set(hotspot[get(hotspotName)].oy, get(yPosition));
-		set(hotspot[get(hotspotName)].ath, get(ath));
-		set(hotspot[get(hotspotName)].atv, get(atv));
-		set(hotspot[get(hotspotName)].distorted, "true");
-		set(hotspot[get(hotspotName)].edge, "lefttop");
-		set(hotspot[get(hotspotName)].capture, "false");
-		set(hotspot[get(hotspotName)].visible, get(visibility));
-		set(hotspot[get(hotspotName)].keep, "true");
-		set(hotspot[get(hotspotName)].scale, "1.0");
-		set(hotspot[get(hotspotName)].width, get(width));
-		set(hotspot[get(hotspotName)].height, get(height));
-		set(hotspot[get(hotspotName)].onloaded, "do_crop_animation(%11, %12, %13)");
-		set(hotspot[get(hotspotName)].onclick, loadscene(%14); showHideHotspots("false"));
+		addhotspot(%1);
+		set(hotspot[%1].url, %2);
+		set(hotspot[%1].ox, get(xPosition));
+		set(hotspot[%1].oy, get(yPosition));
+		set(hotspot[%1].ath, %8);
+		set(hotspot[%1].atv, %9);
+		set(hotspot[%1].distorted, "true");
+		set(hotspot[%1].edge, "lefttop");
+		set(hotspot[%1].capture, "false");
+		set(hotspot[%1].visible, %10);
+		set(hotspot[%1].keep, "true");
+		set(hotspot[%1].scale, "1.0");
+		set(hotspot[%1].width, get(width));
+		set(hotspot[%1].height, get(height));
+		set(hotspot[%1].onloaded, "do_crop_animation(%11, %12, %13)");
+		set(hotspot[%1].onclick, loadscene(%14););
 	</action>
 
 	<action name="showHideHotspots">
 		set(hotspot["SunsetUI"].visible, %1);
 		set(hotspot["OfficeUI"].visible, %1);
 		set(hotspot["VRUI"].visible, %1);
-	</action>>
+	</action>
 
 	<!--
 		do_crop_animation(framewidth, frameheight, framerate)
@@ -152,18 +160,19 @@
 		</image>
 	</scene>
 
-	<scene name="scene_office360" title="Office 360 Video">
+	<scene name="scene_office360" title="Office 360 Video" onstart="showHideHotspots('false')">
 		<!-- set the default view -->
 		<view hlookat="0" vlookat="0" fovtype="DFOV" fov="130" fovmin="75" fovmax="150" distortion="0.0" />
 		<!-- include the videoplayer plugin -->
-		<plugin name="video"
-		        url.html5="%SWFPATH%/plugins/videoplayer.js"
-		        url.flash="%SWFPATH%/plugins/videoplayer.swf"
-		        pausedonstart="true"
-		        loop="true"
-		        volume="1.0"
-		        videourl="video/Office360.mp4"
-		        onloaded="playvideo();"
+		<plugin 
+			name="video"
+			url.html5="%SWFPATH%/plugins/videoplayer.js"
+			url.flash="%SWFPATH%/plugins/videoplayer.swf"
+			pausedonstart="true"
+			loop="true"
+			volume="1.0"
+			videourl="video/Office360.mp4"
+			onloaded="playvideo();"
         />
 
 		<!-- use the videoplayer plugin as panoramic image source -->
@@ -172,18 +181,19 @@
 		</image>
 	</scene>
 
-	<scene name="scene_watchUsWork360" title="Watch us work 360 video">
+	<scene name="scene_watchUsWork360" title="Watch us work 360 video" onstart="showHideHotspots('false')">
 		<!-- set the default view -->
 		<view hlookat="0" vlookat="0" fovtype="DFOV" fov="130" fovmin="75" fovmax="150" distortion="0.0" />
 		<!-- include the videoplayer plugin -->
-		<plugin name="video"
-		        url.html5="%SWFPATH%/plugins/videoplayer.js"
-		        url.flash="%SWFPATH%/plugins/videoplayer.swf"
-		        pausedonstart="true"
-		        loop="true"
-		        volume="1.0"
-		        videourl="video/ProjectorDemonstration.mp4"
-		        onloaded="playvideo();"
+		<plugin 
+			name="video"
+			url.html5="%SWFPATH%/plugins/videoplayer.js"
+			url.flash="%SWFPATH%/plugins/videoplayer.swf"
+			pausedonstart="true"
+			loop="true"
+			volume="1.0"
+			videourl="video/ProjectorDemonstration.mp4"
+			onloaded="playvideo();"
         />
 
 		<!-- use the videoplayer plugin as panoramic image source -->
@@ -192,18 +202,19 @@
 		</image>
 	</scene>
 
-	<scene name="scene_sunset360" title="Santa Monica Pier 360 video">
+	<scene name="scene_sunset360" title="Santa Monica Pier 360 video" onstart="showHideHotspots('false')">
 		<!-- set the default view -->
 		<view hlookat="0" vlookat="0" fovtype="DFOV" fov="130" fovmin="75" fovmax="150" distortion="0.0" />
 		<!-- include the videoplayer plugin -->
-		<plugin name="video"
-		        url.html5="%SWFPATH%/plugins/videoplayer.js"
-		        url.flash="%SWFPATH%/plugins/videoplayer.swf"
-		        pausedonstart="true"
-		        loop="true"
-		        volume="1.0"
-		        videourl="video/SantaMonica.mp4"
-		        onloaded="playvideo();"
+		<plugin 
+			name="video"
+			url.html5="%SWFPATH%/plugins/videoplayer.js"
+			url.flash="%SWFPATH%/plugins/videoplayer.swf"
+			pausedonstart="true"
+			loop="true"
+			volume="1.0"
+			videourl="video/SantaMonica.mp4"
+			onloaded="playvideo();"
         />
 
 		<!-- use the videoplayer plugin as panoramic image source -->

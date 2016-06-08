@@ -1028,7 +1028,7 @@
 	<!--  ************  -->
 	<!--  Context Menu  -->
 	<!--  ************  -->
-	<contextmenu fullscreen="false"></contextmenu>
+	<contextmenu fullscreen="false" versioninfo="hide"></contextmenu>
 	<events name="contextmenuevents" keep="true" onenterfullscreen="updateContextMenu" onexitfullscreen="updateContextMenu" onxmlcomplete="updateContextMenu"/>
 	<action name="updateContextMenu"></action>
 

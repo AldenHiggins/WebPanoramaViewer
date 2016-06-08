@@ -3,7 +3,7 @@
 
 	<!-- startup action - load the first scene -->
 	<action name="startup" autorun="onstart">
-		<!-- showlog(true); -->
+		showlog(true);
 		if(startscene === null OR !scene[get(startscene)], copy(startscene,scene[0].name); );
 		loadscene(get(startscene), null, MERGE);
 		createGifs();
@@ -11,41 +11,11 @@
 
 	<action name="createGifs">
  		<!-- Set up the sunset GIF -->
- 		set(scaleFactor, 1);
-		set(imageName, "gifs/NewSunset/SpriteSheet");
-		if (device.mobile
-			,
-			txtadd(imageName, get(imageName), "Mobile.png");
-			set(scaleFactor, .75);
-			,
-			txtadd(imageName, get(imageName), ".png");
-			set(scaleFactor, 1);
-		);
-		createGifHotspots("SunsetUI", get(imageName), 460, 260, 736, 650, 1536, 0, 0, "true", calc(736 * scaleFactor), calc(577 * scaleFactor), 15, "scene_sunset360");
-
+		createGifHotspots("SunsetUI", "gifs/NewSunset/SpriteSheet", 460, 260, 736, 577, 1536, 0, "true", 1, 1.126, .75, 15, "scene_sunset360");
 		<!-- Set up the visit the office GIF -->
-		set(imageName, "gifs/VisitOfficeRedesign/SpriteSheet");
-		if (device.mobile
-			,
-			txtadd(imageName, get(imageName), "Mobile.png");
-			set(scaleFactor, .35);
-			,
-			txtadd(imageName, get(imageName), ".png");
-			set(scaleFactor, 1);
-		);
-		createGifHotspots("OfficeUI", get(imageName), 100, 620, 372, 460, 1536, 0, 0, "true", calc(828 * scaleFactor), calc(1024 * scaleFactor), 15, "scene_office360");
-
+		createGifHotspots("OfficeUI", "gifs/VisitOfficeRedesign/SpriteSheet", 100, 620, 828, 1024, 1536, 0, "true", .449, .449, .35, 15, "scene_office360");
 		<!-- Create the watch us work GIF -->
-		set(imageName, "gifs/NewVR/SpriteSheet");
-		if (device.mobile
-			,
-			txtadd(imageName, get(imageName), "Mobile.png");
-			set(scaleFactor, .9);
-			,
-			txtadd(imageName, get(imageName), ".png");
-			set(scaleFactor, 1);
-		);
-		createGifHotspots("VRUI", get(imageName), -200, 860, 600, 600, 1536, 180, 0, "true", calc(600 * scaleFactor), calc(600 * scaleFactor), 15, "scene_watchUsWork360");
+		createGifHotspots("VRUI", "gifs/NewVR/SpriteSheet", -200, 860, 600, 600, 1536, 1, "true", 1, 1, .9, 15, "scene_watchUsWork360");
 	</action>
 
 	<!-- 
@@ -57,19 +27,47 @@
 		width, %5
 		height, %6
 		originalCubeSize, %7
-		ath, %8
-		atv, %9
-		visibility, %10
-		cubeWidth, %11
-		cubeHeight, %12
+		cubeSide, %8
+		- Cube Sides: 
+			0 Front
+			1 Back
+			2 Right
+			3 Left
+			4 Up
+			5 Down
+		visibility, %9
+		xScale, %10
+		yScale, %11
+		mobileSpriteSheetScale, %12
 		frameRate, %13
 		sceneTheHotspotPointsTo, %14
 	 -->
 	<action name="createGifHotspots">
+		<!-- Change the ath and atv based on what face the cube is on -->
+		set(ath, 0);
+		set(atv, 0);
+
+		if (%8 == 1, set(ath, 180));
+		if (%8 == 2, set(ath, 90));
+		if (%8 == 3, set(ath, -90));
+		if (%8 == 4, set(atv, -90));
+		if (%8 == 5, set(atv, 90));
+
+		<!-- Change the scale factor and image name for a mobile device -->
+ 		set(scaleFactor, 1);
+		set(imageName, %2);
+		if (device.mobile
+			,
+			txtadd(imageName, get(imageName), "Mobile");
+			set(scaleFactor, %13);	
+		);
+		txtadd(imageName, get(imageName), ".png");
+
+		<!-- Calculate the position and area of the hotspot based on the originalCubeSize -->
 		set(xPosition, %3);
 		set(yPosition, %4);
-		set(width, %5);
-		set(height, %6);
+		set(width, calc(%5 * %10));
+		set(height, calc(%6 * %11));
 		set(originalCubeSize, %7);
 
 		<!-- Calculate the width/height of the hotspot -->
@@ -90,20 +88,20 @@
 
 		<!-- Create the hotspot -->
 		addhotspot(%1);
-		set(hotspot[%1].url, %2);
+		set(hotspot[%1].url, get(imageName));
 		set(hotspot[%1].ox, get(xPosition));
 		set(hotspot[%1].oy, get(yPosition));
-		set(hotspot[%1].ath, %8);
-		set(hotspot[%1].atv, %9);
+		set(hotspot[%1].ath, get(ath));
+		set(hotspot[%1].atv, get(atv));
 		set(hotspot[%1].distorted, "true");
 		set(hotspot[%1].edge, "lefttop");
 		set(hotspot[%1].capture, "false");
-		set(hotspot[%1].visible, %10);
+		set(hotspot[%1].visible, %9);
 		set(hotspot[%1].keep, "true");
 		set(hotspot[%1].scale, "1.0");
 		set(hotspot[%1].width, get(width));
 		set(hotspot[%1].height, get(height));
-		set(hotspot[%1].onloaded, "do_crop_animation(%11, %12, %13)");
+		set(hotspot[%1].onloaded, "do_crop_animation(calc(%5 * scaleFactor), calc(%6 * scaleFactor), %13)");
 		set(hotspot[%1].onclick, loadscene(%14););
 	</action>
 

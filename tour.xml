@@ -89,7 +89,7 @@
 		set(hotspot[get(hotspotName)].atv, get(atv));
 		set(hotspot[get(hotspotName)].distorted, "true");
 		set(hotspot[get(hotspotName)].edge, "lefttop");
-		set(hotspot[get(hotspotName)].capture, "true");
+		set(hotspot[get(hotspotName)].capture, "false");
 		set(hotspot[get(hotspotName)].visible, get(visibility));
 		set(hotspot[get(hotspotName)].keep, "true");
 		set(hotspot[get(hotspotName)].scale, "1.0");

@@ -11,11 +11,11 @@
 
 	<action name="createGifs">
  		<!-- Set up the sunset GIF -->
-		createGifHotspots("SunsetUI", "gifs/NewSunset/SpriteSheet", 460, 260, 736, 577, 1536, 0, "true", 1, 1.126, .75, 15, "scene_sunset360");
+		createGifHotspot("SunsetUI", "gifs/NewSunset/SpriteSheet", 460, 260, 736, 577, 1536, 0, "true", 1, 1.126, .75, 15, "scene_sunset360");
 		<!-- Set up the visit the office GIF -->
-		createGifHotspots("OfficeUI", "gifs/VisitOfficeRedesign/SpriteSheet", 100, 620, 828, 1024, 1536, 0, "true", .449, .449, .35, 15, "scene_office360");
+		createGifHotspot("OfficeUI", "gifs/VisitOfficeRedesign/SpriteSheet", 100, 620, 828, 1024, 1536, 0, "true", .449, .449, .35, 15, "scene_office360");
 		<!-- Create the watch us work GIF -->
-		createGifHotspots("VRUI", "gifs/NewVR/SpriteSheet", -200, 860, 600, 600, 1536, 1, "true", 1, 1, .9, 15, "scene_watchUsWork360");
+		createGifHotspot("VRUI", "gifs/NewVR/SpriteSheet", -200, 860, 600, 600, 1536, 1, "true", 1, 1, .9, 15, "scene_watchUsWork360");
 	</action>
 
 	<!-- 
@@ -42,7 +42,7 @@
 		frameRate, %13
 		sceneTheHotspotPointsTo, %14
 	 -->
-	<action name="createGifHotspots">
+	<action name="createGifHotspot">
 		<!-- Change the ath and atv based on what face the cube is on -->
 		set(ath, 0);
 		set(atv, 0);

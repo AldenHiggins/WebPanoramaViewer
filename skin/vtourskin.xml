@@ -6,6 +6,7 @@
 	<include url="%SWFPATH%/skin/plugins/swipe_gallery.xml" />
 	<include url="%SWFPATH%/skin/plugins/loadinganimation.xml" />
 	<include url="%SWFPATH%/plugins/webvr.xml" devices="html5" />
+	<plugin name="skin_gyro" keep="true" url="" html5_url="%SWFPATH%/plugins/gyro2.js" devices="html5" enabled="false" onavailable="skin_arrange_buttons();" />
 
 	<!-- Load in the webVR settings -->
 	<include url="%SWFPATH%/skin/webVRSettings.xml" devices="html5" />
@@ -63,105 +64,148 @@
 		design_text_shadow="1"
     />
 
+	<!--
+	////////////////////////////////////////////////////////////////////////////////////
+	///////////////////////////////   MISC SETUP  //////////////////////////////////////
+	////////////////////////////////////////////////////////////////////////////////////
+	-->
+
 	<!-- save the url path of this xml file (the url value will be adjusted during xml parsing) -->
 	<vtourskinxmlpath url="./" />
 
 	<!-- mouse / touch / keyboard(button) control settings - http://krpano.com/docu/xml/#control -->
-	<control mouse="drag"
-	         touch="drag"
-	         zoomtocursor="false"
-	         zoomoutcursor="false"
-	         draginertia="0.1"
-	         dragfriction="0.9"
-	         movetoaccelerate="1.0"
-	         movetospeed="10.0"
-	         movetofriction="0.8"
-	         keybaccelerate="0.09"
-	         keybfriction="0.94"
-	         keybfovchange="0.25"
-	         mousefovchange="1.0"
-	         fovspeed="3.0"
-	         fovfriction="0.9"
-	         bouncinglimits="true"
-	         />
+	<control 
+		mouse="drag"
+		touch="drag"
+		zoomtocursor="false"
+		zoomoutcursor="false"
+		draginertia="0.1"
+		dragfriction="0.9"
+		movetoaccelerate="1.0"
+		movetospeed="10.0"
+		movetofriction="0.8"
+		keybaccelerate="0.09"
+		keybfriction="0.94"
+		keybfovchange="0.25"
+		mousefovchange="1.0"
+		fovspeed="3.0"
+		fovfriction="0.9"
+		bouncinglimits="true"
+     />
 
 	<!-- mouse cursors - http://krpano.com/docu/xml/#cursors -->
-	<cursors standard="default"
-	         dragging="move"
-	         moving="move"
-	         />
+	<cursors 
+		standard="default"
+		dragging="move"
+		moving="move"
+    />
 
 	<!-- ensure stagescale 2x for mobile devices (regardless if mobilescale is 0.5 or 1.0) -->
 	<krpano stagescale="calc:stagescale * 2" if="stagescale LT 1.0" devices="mobile" />
 
-	<!--  ************  -->
-	<!--  Context Menu  -->
-	<!--  ************  -->
+	<!-- Context Menu (basically just disable it) -->
 	<contextmenu fullscreen="false" versioninfo="hide"></contextmenu>
 	<events name="contextmenuevents" keep="true" onenterfullscreen="updateContextMenu" onexitfullscreen="updateContextMenu" onxmlcomplete="updateContextMenu"/>
 	<action name="updateContextMenu"></action>
 
-	<!-- Image gallery style -->
-    <layer name="gallery" type="container" align="center" width="80%" height="80%" alpha="0" autoalpha="true" bgcolor="0x000000" bgalpha="0.8" keep="true">
-		<layer name="gallery_scrollarea" url="%SWFPATH%/plugins/scrollarea.swf" alturl="%SWFPATH%/plugins/scrollarea.js" keep="true" align="left" width="0" height="100%" zorder="1" direction="h" ondown="set(gallery_scrollarea_start_pos, get(x))">
-		</layer>
-		<layer name="arrow_left"  align="left"  x="10" keep="true" visible="false" zorder="2" onclick="move_image(left)" url="%SWFPATH%/skin/arrow_left.png"  />
-		<layer name="arrow_right" align="right" x="10" keep="true" visible="false" zorder="2" onclick="move_image(right)" url="%SWFPATH%/skin/arrow_right.png" />
-		<layer name="gallery_close" align="righttop" x="10" y="10" keep="true" zorder="2" onclick="hide_gallery()" url="%SWFPATH%/skin/close.png" />
-	</layer>
-
-	<!-- skin styles -->
+	<!--
+	////////////////////////////////////////////////////////////////////////////////////
+	/////////////////////////////////	STYLES   ///////////////////////////////////////
+	////////////////////////////////////////////////////////////////////////////////////
+	-->
 
 	<!-- skin_base - the base skin image -->
 	<style name="skin_base" url="calc:vtourskinxmlpath.url + skin_settings.design_skin_images" />
 
-
 	<!-- skin_glow - button glowing (if additional ondown,onup,onout,over events are needed, this style provides ondown2,onup2,onover2,onout2 events) -->
-	<style name="skin_glow"
-	       ondown="copy(skin_lockglow,name); skin_buttonglow(get(name)); if(ondown2, ondown2() );"
-	       onover="if(skin_lockglow === null, copy(skin_lockglow,name); skin_buttonglow(get(name),0.3) ); if(onover2, onover2() );"
-	       onout="if(skin_lockglow === name AND !pressed, skin_buttonglow(null);delete(skin_lockglow); ); if(onout2, onout2() );"
-	       onup="if(onup2, onup2()); delayedcall(0, if(hovering AND enabled, skin_buttonglow(get(name),0.3); , skin_buttonglow(null);delete(skin_lockglow); ); );"
-	       />
+	<style 
+		name="skin_glow"
+		ondown="copy(skin_lockglow,name); skin_buttonglow(get(name)); if(ondown2, ondown2() );"
+		onover="if(skin_lockglow === null, copy(skin_lockglow,name); skin_buttonglow(get(name),0.3) ); if(onover2, onover2() );"
+		onout="if(skin_lockglow === name AND !pressed, skin_buttonglow(null);delete(skin_lockglow); ); if(onout2, onout2() );"
+		onup="if(onup2, onup2()); delayedcall(0, if(hovering AND enabled, skin_buttonglow(get(name),0.3); , skin_buttonglow(null);delete(skin_lockglow); ); );"
+   />
 
 	<!-- skin_thumbtext_style - style/textfield for the (optional, skin_settings.thumbs_text) thumbnails texts -->
-	<style name="skin_thumbtext_style" url="%SWFPATH%/plugins/textfield.swf" align="bottom" width="100%" autoheight="true" y="5" enabled="false" background="false" border="false" css="calc:skin_settings.design_text_css + ' text-align:center; font-size:10px;'" textshadow="get:skin_settings.design_text_shadow" />
+	<style 
+		name="skin_thumbtext_style"
+		url="%SWFPATH%/plugins/textfield.swf"
+		align="bottom"
+		width="100%"
+		autoheight="true"
+		y="5"
+		enabled="false"
+		background="false"
+		border="false"
+		css="calc:skin_settings.design_text_css + ' text-align:center; font-size:10px;'" 
+		textshadow="get:skin_settings.design_text_shadow" 
+	/>
 
 	<!-- skin_hotspotstyle - style for the hotspots -->
-	<style name="skin_hotspotstyle" url="vtourskin_hotspot.png" scale="0.5" edge="top" distorted="true"
-	       tooltip=""
-	       onclick="if(linkedscene, set(enabled,false); skin_hidetooltips(); tween(depth|alpha|oy|rx, 4000|0.0|-50|-60, 0.5, default, loadscene(get(linkedscene),null,get(skin_settings.loadscene_flags),get(skin_settings.loadscene_blend)); skin_updatescroll(); ); );"
-	       onover="tween(scale,0.55);"
-	       onout="tween(scale,0.5);"
-	       onloaded="if(linkedscene AND skin_settings.tooltips_hotspots, copy(tooltip,scene[get(linkedscene)].title); loadstyle(skin_tooltips); );"
-	       />
+	<style 
+		name="skin_hotspotstyle" 
+		url="vtourskin_hotspot.png"
+		scale="0.5"
+		edge="top"
+		distorted="true"
+		tooltip=""
+		onclick="if(linkedscene, set(enabled,false); skin_hidetooltips(); tween(depth|alpha|oy|rx, 4000|0.0|-50|-60, 0.5, default, loadscene(get(linkedscene),null,get(skin_settings.loadscene_flags),get(skin_settings.loadscene_blend)); skin_updatescroll(); ); );"
+		onover="tween(scale,0.55);"
+		onout="tween(scale,0.5);"
+		onloaded="if(linkedscene AND skin_settings.tooltips_hotspots, copy(tooltip,scene[get(linkedscene)].title); loadstyle(skin_tooltips); );"
+    />
 
 	<!-- skin_tooltip - style for the thumb, hotspot and mapspot tooltips -->
-	<style name="skin_tooltips"
-	       onover.mouse="copy(layer[skin_tooltip].html, tooltip);
-	                     set(layer[skin_tooltip].visible, true);
-	                     tween(layer[skin_tooltip].alpha, 1.0, 0.1);
-	                     asyncloop(hovering, copy(layer[skin_tooltip].x,mouse.stagex); copy(layer[skin_tooltip].y,mouse.stagey); );"
-	       onout.mouse="tween(layer[skin_tooltip].alpha, 0.0, 0.1, default, set(layer[skin_tooltip].visible,false), copy(layer[skin_tooltip].x,mouse.stagex); copy(layer[skin_tooltip].y,mouse.stagey); );"
-	       />
-
+	<style 
+		name="skin_tooltips"
+		onover.mouse="copy(layer[skin_tooltip].html, tooltip);
+		             set(layer[skin_tooltip].visible, true);
+		             tween(layer[skin_tooltip].alpha, 1.0, 0.1);
+		             asyncloop(hovering, copy(layer[skin_tooltip].x,mouse.stagex); copy(layer[skin_tooltip].y,mouse.stagey); );"
+        onout.mouse="tween(layer[skin_tooltip].alpha, 0.0, 0.1, default, set(layer[skin_tooltip].visible,false), copy(layer[skin_tooltip].x,mouse.stagex); copy(layer[skin_tooltip].y,mouse.stagey); );"
+    />
 
 	<!-- the tooltip textfield -->
-	<layer name="skin_tooltip" keep="true"
-	       url="%SWFPATH%/plugins/textfield.swf"
-	       parent="STAGE"
-	       visible="false" alpha="0" enabled="false"
-	       align="lefttop" edge="bottom" oy="-2" width="200" autoheight="true"
-	       background="false" backgroundcolor="0xFFFFFF" backgroundalpha="1.0"
-	       border="false" bordercolor="0x000000" borderalpha="1.0" borderwidth="1.0" roundedge="0"
-	       shadow="0.0" shadowrange="4.0" shadowangle="45" shadowcolor="0x000000" shadowalpha="1.0"
-	       textshadow="get:skin_settings.design_text_shadow" textshadowrange="6.0" textshadowangle="90" textshadowcolor="0x000000" textshadowalpha="1.0"
-	       css="calc:skin_settings.design_text_css + ' text-align:center; font-size:16px;'"
-	       html=""
-	       />
+	<layer 
+		name="skin_tooltip" 
+		keep="true"
+		url="%SWFPATH%/plugins/textfield.swf"
+		parent="STAGE"
+		visible="false" 
+		alpha="0"
+		enabled="false"
+		align="lefttop"
+		edge="bottom"
+		oy="-2"
+		width="200"
+		autoheight="true"
+		background="false"
+		backgroundcolor="0xFFFFFF"
+		backgroundalpha="1.0"
+		border="false"
+		bordercolor="0x000000"
+		borderalpha="1.0"
+		borderwidth="1.0"
+		roundedge="0"
+		shadow="0.0"
+		shadowrange="4.0"
+		shadowangle="45"
+		shadowcolor="0x000000"
+		shadowalpha="1.0"
+		textshadow="get:skin_settings.design_text_shadow"
+		textshadowrange="6.0"
+		textshadowangle="90"
+		textshadowcolor="0x000000"
+		textshadowalpha="1.0"
+		css="calc:skin_settings.design_text_css + ' text-align:center; font-size:16px;'"
+		html=""
+    />
 
-
-	<!-- skin layout -->
+	<!--
+	////////////////////////////////////////////////////////////////////////////////////
+	//////////////////////////////   BUTTON LAYOUT   ///////////////////////////////////
+	////////////////////////////////////////////////////////////////////////////////////
+	-->
 	<layer name="skin_layer" keep="true" type="container" align="top" width="get:skin_settings.layout_width" maxwidth="get:skin_settings.layout_maxwidth" height="100%" maskchildren="true" visible="false" bgcapture="false" zorder="1">
 		<layer name="skin_scroll_window" type="container" align="bottom" width="100%" height="100%" x="0" y="calc:skin_settings.controlbar_offset + skin_settings.controlbar_height - skin_settings.controlbar_overlap" maskchildren="true" onloaded="skin_calc_opened_closed();" zorder="1">
 			<layer name="skin_scroll_layer" type="container" align="bottom" width="get:skin_settings.controlbar_width" height="100%" x="0" y="200" y_offset="get:skin_settings.controlbar_overlap" accuracy="1" bgalpha="get:skin_settings.design_bgalpha" bgcolor="get:skin_settings.design_bgcolor" bgborder="get:skin_settings.design_bgborder" bgroundedge="get:skin_settings.design_bgroundedge" bgshadow="get:skin_settings.design_bgshadow">
@@ -234,10 +278,18 @@
 		<layer name="skin_btn_next_fs_icon" style="skin_base" crop="64|64|64|64" align="center" scale="0.5" enabled="false" />
 	</layer>
 
-
-	<!-- gyro plugin -->
-	<plugin name="skin_gyro" keep="true" url="" html5_url="%SWFPATH%/plugins/gyro2.js" devices="html5" enabled="false" onavailable="skin_arrange_buttons();" />
-
+	<!--
+	////////////////////////////////////////////////////////////////////////////////////
+	//////////////////////////////   IMAGE GALLERY   ///////////////////////////////////
+	////////////////////////////////////////////////////////////////////////////////////
+	-->
+    <layer name="gallery" type="container" align="center" width="80%" height="80%" alpha="0" autoalpha="true" bgcolor="0x000000" bgalpha="0.8" keep="true">
+		<layer name="gallery_scrollarea" url="%SWFPATH%/plugins/scrollarea.swf" alturl="%SWFPATH%/plugins/scrollarea.js" keep="true" align="left" width="0" height="100%" zorder="1" direction="h" ondown="set(gallery_scrollarea_start_pos, get(x))">
+		</layer>
+		<layer name="arrow_left"  align="left"  x="10" keep="true" visible="false" zorder="2" onclick="move_image(left)" url="%SWFPATH%/skin/arrow_left.png"  />
+		<layer name="arrow_right" align="right" x="10" keep="true" visible="false" zorder="2" onclick="move_image(right)" url="%SWFPATH%/skin/arrow_right.png" />
+		<layer name="gallery_close" align="righttop" x="10" y="10" keep="true" zorder="2" onclick="hide_gallery()" url="%SWFPATH%/skin/close.png" />
+	</layer>
 
 	<!-- skin events -->
 	<events name="skin_events" keep="true"
@@ -250,8 +302,7 @@
 	        onenterfullscreen.fullscreensupport="set(layer[skin_btn_fs].crop, '64|576|64|64');"
 	        onexitfullscreen.fullscreensupport="set(layer[skin_btn_fs].crop, '0|576|64|64');"
 	        onkeydown="skin_keydown_event();"
-	        />
-
+    />
 
 	<!-- skin actions -->
 	<action name="skin_startup">
@@ -895,7 +946,7 @@
 	         align="center" alpha="0.0" autoalpha="true"
 	         state="hidden"
 	         onclick="skin_video_playpause_click();"
-	         />
+    />
 
 	<action name="skin_video_updatestate">
 		calc(layer[skin_video_playpause].crop, plugin[video].ispaused ? '0|640|64|64' : '64|640|64|64');

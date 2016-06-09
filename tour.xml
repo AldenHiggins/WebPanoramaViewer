@@ -7,6 +7,7 @@
 		if(startscene === null OR !scene[get(startscene)], copy(startscene,scene[0].name); );
 		loadscene(get(startscene), null, MERGE);
 		set(layer[skin_gallery_picture].onclick, "show_gallery('sampleGallery')");
+		set(layer[skin_logo].onclick, "youtubeplayer_open('nVh65MyRuME');");
 		createGifs();
 	</action>
 

@@ -1,5 +1,6 @@
 ﻿<krpano version="1.19" title="Kilograph Cabin">
 	<include url="skin/vtourskin.xml" />
+	<include url="plugins/loadinganimation.xml" />
 
 	<!-- startup action - load the first scene -->
 	<action name="startup" autorun="onstart">
@@ -162,7 +163,7 @@
 		</image>
 	</scene>
 
-	<scene name="scene_office360" title="Office 360 Video" onstart="showHideHotspots('false')">
+	<scene name="scene_office360" title="Office 360 Video" onstart="showHideHotspots('false'); loadinganimation_startloading();">
 		<!-- set the default view -->
 		<view hlookat="0" vlookat="0" fovtype="DFOV" fov="130" fovmin="75" fovmax="150" distortion="0.0" />
 		<!-- include the videoplayer plugin -->
@@ -174,7 +175,7 @@
 			loop="true"
 			volume="1.0"
 			videourl="video/Office360.mp4"
-			onloaded="playvideo();"
+			onloaded="loadinganimation_stoploading(); playvideo();"
         />
 
 		<!-- use the videoplayer plugin as panoramic image source -->
@@ -183,7 +184,7 @@
 		</image>
 	</scene>
 
-	<scene name="scene_watchUsWork360" title="Watch us work 360 video" onstart="showHideHotspots('false')">
+	<scene name="scene_watchUsWork360" title="Watch us work 360 video" onstart="showHideHotspots('false'); loadinganimation_startloading();">
 		<!-- set the default view -->
 		<view hlookat="0" vlookat="0" fovtype="DFOV" fov="130" fovmin="75" fovmax="150" distortion="0.0" />
 		<!-- include the videoplayer plugin -->
@@ -195,7 +196,7 @@
 			loop="true"
 			volume="1.0"
 			videourl="video/ProjectorDemonstration.mp4"
-			onloaded="playvideo();"
+			onloaded="loadinganimation_stoploading(); playvideo();"
         />
 
 		<!-- use the videoplayer plugin as panoramic image source -->
@@ -204,7 +205,7 @@
 		</image>
 	</scene>
 
-	<scene name="scene_sunset360" title="Santa Monica Pier 360 video" onstart="showHideHotspots('false')">
+	<scene name="scene_sunset360" title="Santa Monica Pier 360 video" onstart="showHideHotspots('false'); loadinganimation_startloading();">
 		<!-- set the default view -->
 		<view hlookat="0" vlookat="0" fovtype="DFOV" fov="130" fovmin="75" fovmax="150" distortion="0.0" />
 		<!-- include the videoplayer plugin -->
@@ -216,7 +217,7 @@
 			loop="true"
 			volume="1.0"
 			videourl="video/SantaMonica.mp4"
-			onloaded="playvideo();"
+			onloaded="loadinganimation_stoploading(); playvideo();"
         />
 
 		<!-- use the videoplayer plugin as panoramic image source -->

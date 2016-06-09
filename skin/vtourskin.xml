@@ -275,8 +275,9 @@
 					<layer name="skin_btn_show_icon" style="skin_base" crop="64|448|64|64" scale="0.5" align="bottom" y="2" enabled="false" />
 				</layer>
 				<layer name="skin_btn_next"      style="skin_base|skin_glow" crop="64|64|64|64"  align="right"       x="5"    y="0"   scale="0.5" alpha="0.5"  onclick="if(skin_settings.thumbs_loop, skin_nextscene_loop(+1), skin_nextscene(+1) );" />
-				</layer>
 			</layer>
+		</layer>
+
 		<layer name="skin_buttonglow"  style="skin_base" crop="64|384|64|64" align="center" x="0" y="1" scale="1.0" alpha="0.0" visible="false" enabled="false" />
 		<layer name="skin_thumbborder" type="container" x="get:skin_settings.design_thumbborder_padding" y="get:skin_settings.design_thumbborder_padding" width="calc:skin_settings.thumbs_width - 2*skin_settings.design_thumbborder_padding" height="calc:skin_settings.thumbs_height - 2*skin_settings.design_thumbborder_padding" visible="false" enabled="false" align="lefttop" bgborder="get:skin_settings.design_thumbborder_bgborder" bgroundedge="get:skin_settings.design_thumbborder_bgroundedge" />
 	</layer>
@@ -766,6 +767,7 @@
 		tween(layer[skin_btn_next_fs].x, 0, get(hidetime));
 
 		if(layer[skin_logo], tween(layer[skin_logo].alpha, 0.0, 0.5, default, set(layer[skin_logo].visible,false)); );
+		if(layer[skin_gallery_picture], tween(layer[skin_gallery_picture].alpha, 0.0, 0.5, default, set(layer[skin_gallery_picture].visible,false)); );\
 
 		stopdelayedcall(skin_btn_show_alpha);
 		set(layer[skin_btn_show].visible, true);
@@ -782,6 +784,7 @@
 		tween(layer[skin_btn_next_fs].x, -50);
 
 		if(layer[skin_logo], set(layer[skin_logo].visible,true); tween(layer[skin_logo].alpha, 1.0); );
+		if(layer[skin_gallery_picture], set(layer[skin_gallery_picture].visible,true); tween(layer[skin_gallery_picture].alpha, 1.0); );
 
 		stopdelayedcall(skin_btn_show_alpha);
 		set(layer[skin_btn_show].visible, false);

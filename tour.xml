@@ -1,12 +1,12 @@
-﻿<krpano version="1.19" title="Kilograph Cabin">
+<krpano version="1.19" title="Kilograph Cabin">
 	<include url="skin/vtourskin.xml" />
-	<include url="plugins/loadinganimation.xml" />
 
 	<!-- startup action - load the first scene -->
 	<action name="startup" autorun="onstart">
 		<!-- showlog(true); -->
 		if(startscene === null OR !scene[get(startscene)], copy(startscene,scene[0].name); );
 		loadscene(get(startscene), null, MERGE);
+		set(layer[skin_gallery_picture].onclick, "show_gallery('sampleGallery')");
 		createGifs();
 	</action>
 
@@ -114,6 +114,14 @@
 		set(hotspot["OfficeUI"].visible, %1);
 		set(hotspot["VRUI"].visible, %1);
 	</action>
+
+	<gallery name="sampleGallery" title="Kilograph Sample Images">
+		<img name="img1" url="%SWFPATH%/images/image1.jpg" title="Escalator" />
+		<img name="img2" url="%SWFPATH%/images/image2.jpg" title="Mask" />
+		<img name="img3" url="%SWFPATH%/images/image3.jpg" title="Wallpaper" />
+		<img name="img4" url="%SWFPATH%/images/image4.jpg" title="F/A-18 C Hornet" />
+		<img name="img5" url="%SWFPATH%/images/image5.jpg" title="Forest" />
+	</gallery>
 
 	<!--
 		do_crop_animation(framewidth, frameheight, framerate)

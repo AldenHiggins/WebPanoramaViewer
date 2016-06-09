@@ -290,59 +290,47 @@
 		<layer name="gallery_close" align="righttop" x="10" y="10" keep="true" zorder="2" onclick="hide_gallery()" url="%SWFPATH%/skin/close.png" />
 	</layer>
 
-	<!-- skin events -->
-	<events name="skin_events" keep="true"
-	        onxmlcomplete="set(events[skin_events].onxmlcomplete,null); skin_startup();"
-	        onnewpano="skin_showloading(true); skin_update_scene_infos(); skin_deeplinking_update_url();"
-	        onremovepano="skin_showloading(true);"
-	        onloadcomplete="skin_showloading(false);"
-	        onidle="skin_deeplinking_update_url();"
-	        onresize="skin_onresize();"
-	        onenterfullscreen.fullscreensupport="set(layer[skin_btn_fs].crop, '64|576|64|64');"
-	        onexitfullscreen.fullscreensupport="set(layer[skin_btn_fs].crop, '0|576|64|64');"
-	        onkeydown="skin_keydown_event();"
+	<!--
+	////////////////////////////////////////////////////////////////////////////////////
+	//////////////////////////////    SKIN EVENTS    ///////////////////////////////////
+	////////////////////////////////////////////////////////////////////////////////////
+	-->
+	<events 
+		name="skin_events" keep="true"
+		onxmlcomplete="set(events[skin_events].onxmlcomplete,null); skin_startup();"
+		onnewpano="skin_showloading(true); skin_update_scene_infos(); skin_deeplinking_update_url();"
+		onremovepano="skin_showloading(true);"
+		onloadcomplete="skin_showloading(false);"
+		onidle="skin_deeplinking_update_url();"
+		onresize="skin_onresize();"
+		onenterfullscreen.fullscreensupport="set(layer[skin_btn_fs].crop, '64|576|64|64');"
+		onexitfullscreen.fullscreensupport="set(layer[skin_btn_fs].crop, '0|576|64|64');"
+		onkeydown="skin_keydown_event();"
     />
 
-	<!-- skin actions -->
+	<!--
+	////////////////////////////////////////////////////////////////////////////////////
+	//////////////////////////////    SKIN ACTIONS    ///////////////////////////////////
+	////////////////////////////////////////////////////////////////////////////////////
+	-->
 	<action name="skin_startup">
-
-		<!-- apply skin settings on startup -->
+		<!-- Apply skin settings on startup -->
 		if(skin_settings.thumbs,
 			if(skin_settings.thumbs_opened, set(layer[skin_thumbs].state,'opened'); set(layer[skin_thumbs_container].visible,true); );
 			copy(layer[skin_thumbs].draggable, skin_settings.thumbs_dragging);
 			if(skin_settings.thumbs_onhoverscrolling AND device.mouse,
 				set(layer[skin_thumbs].draggable, false);
 				set(layer[skin_thumbs].onhover_autoscrolling, true);
-			  );
-		  );
+			);
+		);
 
 		if(skin_settings.gyro AND !device.desktop AND device.html5,
 			copy(plugin[skin_gyro].url, plugin[skin_gyro].html5_url);
-		  );
+		);
 
 		if(skin_settings.webvr AND device.html5 AND device.webgl,
 			copy(plugin[WebVR].url, plugin[WebVR].pluginurl);
-		  );
-
-		if(skin_settings.maps == true,
-			set(layer[skin_btn_map].visible, true);
-
-			if(device.flash,
-				copy(layer[skin_map].key, skin_settings.maps_bing_api_key);
-				set(layer[skin_map].url, '%SWFPATH%/plugins/bingmaps.swf');
-			  ,
-				if(skin_settings.maps_type == 'bing',
-					copy(layer[skin_map].key, skin_settings.maps_bing_api_key);
-					set(layer[skin_map].url, '%SWFPATH%/plugins/bingmaps.js');
-				  ,
-					set(layer[skin_map].url, '%SWFPATH%/plugins/googlemaps.js');
-				  );
-			  );
-		  );
-
-		if(skin_settings.littleplanetintro AND (device.webgl OR device.flash),
-			skin_setup_littleplanetintro();
-		  );
+		);
 
 		skin_addthumbs();
 		skin_onresize();
@@ -351,11 +339,11 @@
 		set(layer[skin_layer].visible, true);
 	</action>
 
-
 	<action name="skin_addthumbs">
-		if(skin_settings.thumbs == false,
+		if(skin_settings.thumbs == false
+			,
 			set(layer[skin_btn_thumbs].visible,false);
-		  ,
+		  	,
 			copy(thumbwidth, skin_settings.thumbs_width);
 			copy(thumbheight, skin_settings.thumbs_height);
 			copy(thumbpadding, skin_settings.thumbs_padding);
@@ -363,12 +351,21 @@
 
 			add(thumbxoffset, thumbwidth, thumbpadding);
 			mul(thumbxcenter, thumbxoffset, 0.5);
-			mul(thumbbarwidth, thumbxoffset, scene.count);
+			<!-- Calculate how many scenes should be added to the thumbnail list -->
+			set(actualThumbnails, 0);
+			for(set(i,0), i LT scene.count, inc(i),
+				if (scene[get(i)].thumburl !== null
+					,
+					add(actualThumbnails, 1);
+				);
+		    );
+			mul(thumbbarwidth, thumbxoffset, actualThumbnails);
 			add(thumbbarwidth, thumbpadding);
 			add(thumbbarheight, thumbpadding, thumbheight);
 			add(thumbbarheight, thumbpadding);
 
-			if(skin_settings.thumbs_scrollindicator,
+			if(skin_settings.thumbs_scrollindicator
+				,
 				copy(layer[skin_thumbs_scrollindicator].y, thumbbarheight);
 				add(thumbbarheight, layer[skin_thumbs_scrollindicator].height);
 			);
@@ -380,44 +377,47 @@
 			copy(layer[skin_thumbs_scrollleft].y, halfheight);
 			copy(layer[skin_thumbs_scrollright].y, halfheight);
 
-			set(thumb_cnt,0);
+			set(thumb_cnt, 0);
 			for(set(i,0), i LT scene.count, inc(i),
-				inc(thumb_cnt);
-				txtadd(thumbname,'skin_thumb_',get(i));
-				addlayer(get(thumbname));
-				copy(layer[get(thumbname)].url, scene[get(i)].thumburl);
-				set(layer[get(thumbname)].keep, true);
-				set(layer[get(thumbname)].parent, 'skin_thumbs');
-				set(layer[get(thumbname)].align, lefttop);
-				copy(layer[get(thumbname)].crop, thumbcrop);
-				copy(layer[get(thumbname)].width, thumbwidth);
-				copy(layer[get(thumbname)].height, thumbheight);
-				mul(thumbx, i, thumbxoffset);
-				add(thumbx, thumbpadding);
-				copy(layer[get(thumbname)].x, thumbx);
-				copy(layer[get(thumbname)].y, thumbpadding);
-				add(scene[get(i)].thumbx, thumbx, thumbxcenter);
-				copy(scene[get(i)].thumby, thumbpadding);
-				set(layer[get(thumbname)].linkedscene, get(scene[get(i)].name) );
-				set(layer[get(thumbname)].onclick, copy(layer[skin_thumbborder].parent, name); loadscene(get(linkedscene),null,get(skin_settings.loadscene_flags),get(skin_settings.loadscene_blend)); );
-				if(skin_settings.tooltips_thumbs,
-					set(layer[get(thumbname)].tooltip, get(scene[get(i)].title) );
-					layer[get(thumbname)].loadstyle(skin_tooltips);
-				  );
-				if(skin_settings.thumbs_text,
-					txtadd(thumbtext, 'skin_thumbtext_', get(i));
-					addlayer(get(thumbtext));
-					layer[get(thumbtext)].loadstyle(skin_thumbtext_style);
-					set(layer[get(thumbtext)].keep, true);
-					set(layer[get(thumbtext)].parent, get(thumbname));
-					set(layer[get(thumbtext)].html, get(scene[get(i)].title));
-				  );
-			   );
+				if (scene[get(i)].thumburl !== null
+					,
+					inc(thumb_cnt);
+					txtadd(thumbname,'skin_thumb_',get(i));
+					addlayer(get(thumbname));
+					copy(layer[get(thumbname)].url, scene[get(i)].thumburl);
+					set(layer[get(thumbname)].keep, true);
+					set(layer[get(thumbname)].parent, 'skin_thumbs');
+					set(layer[get(thumbname)].align, lefttop);
+					copy(layer[get(thumbname)].crop, thumbcrop);
+					copy(layer[get(thumbname)].width, thumbwidth);
+					copy(layer[get(thumbname)].height, thumbheight);
+					mul(thumbx, calc(thumb_cnt - 1), thumbxoffset);
+					add(thumbx, thumbpadding);
+					copy(layer[get(thumbname)].x, thumbx);
+					copy(layer[get(thumbname)].y, thumbpadding);
+					add(scene[get(i)].thumbx, thumbx, thumbxcenter);
+					copy(scene[get(i)].thumby, thumbpadding);
+					set(layer[get(thumbname)].linkedscene, get(scene[get(i)].name) );
+					set(layer[get(thumbname)].onclick, copy(layer[skin_thumbborder].parent, name); loadscene(get(linkedscene),null,get(skin_settings.loadscene_flags),get(skin_settings.loadscene_blend)); );
+					if(skin_settings.tooltips_thumbs,
+						set(layer[get(thumbname)].tooltip, get(scene[get(i)].title) );
+						layer[get(thumbname)].loadstyle(skin_tooltips);
+				  	);
+					if(skin_settings.thumbs_text,
+						txtadd(thumbtext, 'skin_thumbtext_', get(i));
+						addlayer(get(thumbtext));
+						layer[get(thumbtext)].loadstyle(skin_thumbtext_style);
+						set(layer[get(thumbtext)].keep, true);
+						set(layer[get(thumbtext)].parent, get(thumbname));
+						set(layer[get(thumbtext)].html, get(scene[get(i)].title));
+				  	);
+				);
+		    );
 
 			if(thumb_cnt == 1,
 				set(layer[skin_thumbs].align, 'lefttop');
-			  );
-		  );
+			);
+	  	);
 	</action>
 
 

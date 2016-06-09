@@ -211,18 +211,7 @@
 		<layer name="skin_scroll_window" type="container" align="bottom" width="100%" height="100%" x="0" y="calc:skin_settings.controlbar_offset + skin_settings.controlbar_height - skin_settings.controlbar_overlap" maskchildren="true" onloaded="skin_calc_opened_closed();" zorder="1">
 			<layer name="skin_scroll_layer" type="container" align="bottom" width="get:skin_settings.controlbar_width" height="100%" x="0" y="200" y_offset="get:skin_settings.controlbar_overlap" accuracy="1" bgalpha="get:skin_settings.design_bgalpha" bgcolor="get:skin_settings.design_bgcolor" bgborder="get:skin_settings.design_bgborder" bgroundedge="get:skin_settings.design_bgroundedge" bgshadow="get:skin_settings.design_bgshadow">
 				<!-- Title of the scene -->
-				<layer name="skin_title" url="%SWFPATH%/plugins/textfield.swf" align="lefttop" edge="leftbottom" x="4" y="0" zorder="4" enabled="false" background="false" border="false" css="calc:skin_settings.design_text_css + ' text-align:left; font-style:italic; font-size:12px;'" textshadow="get:skin_settings.design_text_shadow" visible="false" onautosized="skin_video_updateseekbarwidth();" />
-
-				<!-- Video controls -->
-				<layer name="skin_video_controls" type="container" align="lefttop" edge="leftbottom" width="100%" height="18" visible="false">
-					<layer name="skin_video_seekbar_container" type="container" align="lefttop" width="100%" height="100%" bgcapture="true" ondown="skin_video_ondownseeking();" >
-						<layer name="skin_video_seekbar" type="container" bgcolor="0xFFFFFF" bgalpha="0.25" align="center" width="100%" height="2">
-							<layer name="skin_video_loadbar" type="container" bgcolor="0xFFFFFF" bgalpha="0.5" align="left" width="0" height="2" />
-							<layer name="skin_video_seekpos" type="container" bgcolor="0xFFFFFF" bgalpha="1.0" align="left" edge="center" x="0" bgroundedge="8" width="10" height="10" />
-						</layer>
-					</layer>
-					<layer name="skin_video_time" url="%SWFPATH%/plugins/textfield.swf" align="rightbottom" x="4" enabled="false" background="false" border="false" css="calc:skin_settings.design_text_css + ' text-align:left; font-style:italic; font-size:12px;'" textshadow="get:skin_settings.design_text_shadow" html="0:00 / 0:00" />
-				</layer>
+				<layer name="skin_title" url="%SWFPATH%/plugins/textfield.swf" align="lefttop" edge="leftbottom" x="4" y="0" zorder="4" enabled="false" background="false" border="false" css="calc:skin_settings.design_text_css + ' text-align:left; font-style:italic; font-size:12px;'" textshadow="get:skin_settings.design_text_shadow" visible="false" />
 
 				<!-- Buttons/Logos above the control bar -->
 				<layer name="skin_logo"      url="%SWFPATH%/skin/KilographIcon.png" align="lefttop"   zorder="6"  visible="true"   x="0"    y="-80"  scale="0.2" alpha="0.7" />
@@ -496,7 +485,6 @@
 		if(layer[skin_map].state    == 'opened', sub(hh,area.pixelheight,skin_settings.controlbar_offset); sub(hh,layer[skin_control_bar].height); sub(hh,32); add(mh,hh); add(mh,skin_settings.controlbar_overlap); sub(mh, layer[skin_scroll_layer].y_offset); copy(layer[skin_map].height, hh); );
 		add(mh, layer[skin_scroll_layer].y_offset);
 		set(layer[skin_scroll_layer].y, get(mh));
-		skin_video_updateseekbarwidth();
 		skin_arrange_buttons();
 	</action>
 
@@ -675,12 +663,6 @@
 				if(backup_control_bouncinglimits !== null,
 					copy(control.bouncinglimits, backup_control_bouncinglimits);
 				  );
-			  );
-
-			if(scene[get(xml.scene)].isvideopano AND plugin[video] !== null,
-				skin_video_addcontrols();
-			  ,
-				skin_video_removecontrols();
 			  );
 		  );
 	</action>
@@ -878,121 +860,6 @@
 			if(scene[get(xml.scene)].havevrimage,
 				loadscene(get(xml.scene), null, MERGE|KEEPVIEW|KEEPMOVING|KEEPHOTSPOTS|NOPREVIEW, BLEND(0.5));
 			  );
-		  );
-	</action>
-
-
-	<!-- videopano support - http://krpano.com/plugins/videoplayer/ -->
-	<action name="skin_video_addcontrols">
-		set(events[skin_events].onclick, skin_video_clickevent() );
-
-		set(plugin[video].onvideoready, skin_video_updatestate() );
-		set(plugin[video].onvideoplay, skin_video_updatestate() );
-		set(plugin[video].onvideopaused, skin_video_updatestate() );
-		set(plugin[video].onvideocomplete, skin_video_updatestate() );
-
-		if(plugin[video].ispaused AND plugin[video].pausedonstart,
-			set(layer[skin_video_playpause].state, 'visible');
-			set(layer[skin_video_playpause].enabled, true);
-			tween(layer[skin_video_playpause].alpha, 1.0);
-		  );
-
-		delayedcall(skin_video_delayedvisible, 0.25, set(layer[skin_video_controls].visible, true) );
-
-		skin_video_updateseekbarwidth();
-		set(layer[skin_video_seekpos].x,0);
-		set(layer[skin_video_loadbar].width,0);
-
-		setinterval(skin_video_seek_updates, 0.5, skin_video_updatetime() );
-	</action>
-
-	<action name="skin_video_removecontrols">
-		stopdelayedcall(skin_video_delayedvisible);
-
-		set(events[skin_events].onclick, null);
-
-		set(layer[skin_video_playpause].alpha, 0.0);
-		set(layer[skin_video_controls].visible, false);
-
-		clearinterval(skin_video_seek_updates);
-	</action>
-
-	<action name="skin_video_updatetime">
-		copy(t1, plugin[video].time);
-		copy(t2, plugin[video].totaltime);
-		if(%1 !== null, calc(t1, %1 * t2); );
-		div(t1_min, t1, 60);
-		mod(t1_sec, t1, 60);
-		Math.floor(t1_min);
-		Math.floor(t1_sec);
-		div(t2_min, t2, 60);
-		mod(t2_sec, t2, 60);
-		Math.floor(t2_min);
-		Math.floor(t2_sec);
-		calc(layer[skin_video_time].html, t1_min + ':' + (t1_sec LT 10 ? '0' : '') + t1_sec + ' / ' + t2_min + ':' + (t2_sec LT 10 ? '0' : '') + t2_sec);
-		calc(layer[skin_video_seekpos].x, (t1 / t2 * 100) + '%');
-		calc(layer[skin_video_loadbar].width, (plugin[video].loadedbytes / plugin[video].totalbytes * 100) + '%');
-	</action>
-
-	<action name="skin_video_updateseekbarwidth">
-		if(skin_settings.title,
-			calc(layer[skin_video_seekbar_container].width, 0 - (32 + layer[skin_title].pixelwidth + layer[skin_video_time].pixelwidth));
-			calc(layer[skin_video_seekbar_container].x, layer[skin_title].pixelwidth + 16);
-		  ,
-			calc(layer[skin_video_seekbar_container].width, 0 - (24 + layer[skin_video_time].pixelwidth));
-			set(layer[skin_video_seekbar_container].x, 8);
-		  );
-	</action>
-
-	<action name="skin_video_ondownseeking">
-		asyncloop(pressed,
-			screentolayer(skin_video_seekbar, mouse.stagex,mouse.stagey, lx,ly);
-			calc(seekpos, lx / layer[skin_video_seekbar].pixelwidth);
-			clamp(seekpos, 0.0, 1.0);
-			skin_video_updatetime(seekpos);
-		  ,
-			plugin[video].seek(calc((seekpos * 100) + '%'));
-		  );
-	</action>
-
-	<layer name="skin_video_playpause" keep="true"
-	         style="skin_base|skin_glow" crop="0|640|64|64" scale="0.75"
-	         align="center" alpha="0.0" autoalpha="true"
-	         state="hidden"
-	         onclick="skin_video_playpause_click();"
-    />
-
-	<action name="skin_video_updatestate">
-		calc(layer[skin_video_playpause].crop, plugin[video].ispaused ? '0|640|64|64' : '64|640|64|64');
-		if(plugin[video].iscomplete,
-			set(layer[skin_video_playpause].state, 'visible');
-			tween(layer[skin_video_playpause].alpha, 1.0);
-		  );
-	</action>
-
-	<action name="skin_video_playpause_click">
-		if(plugin[video].ispaused,
-			plugin[video].play();
-			set(layer[skin_video_playpause].state, 'hidden');
-			tween(layer[skin_video_playpause].alpha, 0.0);
-		  ,
-			plugin[video].pause();
-			set(layer[skin_video_playpause].state, 'visible');
-			tween(layer[skin_video_playpause].alpha, 1.0);
-			delayedcall(autohide_pp, 2.0, set(layer[skin_video_playpause].state,'hidden'); tween(layer[skin_video_playpause].alpha, 0.0); );
-		  );
-	</action>
-
-	<action name="skin_video_clickevent">
-		stopdelayedcall(autohide_pp);
-
-		switch(layer[skin_video_playpause].state, 'visible', 'hidden');
-
-		if(layer[skin_video_playpause].state == 'hidden',
-			tween(layer[skin_video_playpause].alpha, 0.0);
-		  ,
-			tween(layer[skin_video_playpause].alpha, 1.0);
-			delayedcall(autohide_pp, 2.0, set(layer[skin_video_playpause].state,'hidden'); tween(layer[skin_video_playpause].alpha, 0.0); );
 		  );
 	</action>
 

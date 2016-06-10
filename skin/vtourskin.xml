@@ -13,7 +13,7 @@
 
 	<!-- skin settings (can be overridden in the tour.xml) -->
 	<skin_settings 
-		maps="false"
+		maps="true"
 		maps_type="bing"
 		maps_bing_api_key=""
 		maps_zoombuttons="false"
@@ -226,17 +226,6 @@
 						<layer name="skin_thumbs_scrollindicator" type="container" bgcolor="0xFFFFFF" bgalpha="0.25" align="lefttop" width="0" y="100" height="2" visible="false" enabled="false" />
 						<layer name="skin_thumbs" state="closed" url.flash="%SWFPATH%/plugins/scrollarea.swf" url.html5="%SWFPATH%/plugins/scrollarea.js" direction="h" align="top" width="100%" height="100" zorder="1" onloaded="skin_updatescroll();" onscroll="skin_updatethumbscroll();" />
 					</layer>
-
-					<!-- Bing map container -->
-					<layer name="skin_map_container" type="container" align="leftop" width="100%" height="100%" bgroundedge="get:skin_settings.design_bgroundedge" maskchildren="true">
-						<layer name="skin_map" state="closed" url="" visible="false" align="lefttop" width="100%" height="50%" x="0" y="0" zorder="1" lat="0" lng="0" zoom="10" bgalpha="0" maptype="satellite" onmapready="skin_addmapspots();">
-							<maptypecontrol visible="true" align="righttop" x="5" y="5" buttonalign="v" scale.mobile="1.5" />
-							<radar visible="false" headingoffset="0" />
-							<spotstyle name="DEFAULT" url="vtourskin_mapspot.png" activeurl="vtourskin_mapspotactive.png" edge="bottom" x="-5" y="-8" scale="0.5" />
-							<layer name="skin_map_zoom_in"  style="skin_base" visible="get:skin_settings.maps_zoombuttons" crop="9|512|46|64"  align="right" x="0" y="-40" zorder="2" ondown="layer[skin_map].zoomin();  skin_buttonglow(get(name));" onup="skin_buttonglow(null);" />
-							<layer name="skin_map_zoom_out" style="skin_base" visible="get:skin_settings.maps_zoombuttons" crop="73|512|46|64" align="right" x="0" y="+40" zorder="2" ondown="layer[skin_map].zoomout(); skin_buttonglow(get(name));" onup="skin_buttonglow(null);" />
-						</layer>
-					</layer>
 				</layer>
 			</layer>
 		</layer>
@@ -251,11 +240,11 @@
 			<layer name="skin_control_bar_buttons" type="container" align="leftbottom" width="100%" height="get:skin_settings.controlbar_height">
 				<layer name="skin_btn_prev"      style="skin_base|skin_glow" crop="0|64|64|64"   align="left"        x="5"    y="0"  scale="0.5" alpha="0.5"  onclick="if(skin_settings.thumbs_loop, skin_nextscene_loop(-1), skin_nextscene(-1) );" />
 
-				<layer name="skin_btn_thumbs"    style="skin_base|skin_glow" crop="0|128|64|64"  align="left"        x="50"   y="0"  scale="0.5" ondown2="skin_showmap(false); skin_showthumbs();" />
+				<layer name="skin_btn_thumbs"    style="skin_base|skin_glow" crop="0|128|64|64"  align="left"        x="50"   y="0"  scale="0.5" ondown2="skin_showthumbs();" />
 
-				<layer name="skin_btn_map"       style="skin_base|skin_glow" crop="64|128|64|64" align="left"        x="90"   y="0"  scale="0.5" ondown2="skin_showthumbs(false); skin_showmap();" visible="false" />
+				<layer name="skin_btn_map"       style="skin_base|skin_glow" crop="64|128|64|64" align="left"        x="90"   y="0"  scale="0.5" ondown2="skin_showthumbs(false);" visible="false" />
 
-				<layer name="skin_btn_gyro"      style="skin_base|skin_glow" crop="0|384|64|64"  align="center"      x="+20" y="0"  scale="0.5" onclick="switch(plugin[skin_gyro].enabled); if(plugin[skin_gyro].enabled, skin_showmap(false));" visible="false" devices="html5" />
+				<layer name="skin_btn_gyro"      style="skin_base|skin_glow" crop="0|384|64|64"  align="center"      x="+20" y="0"  scale="0.5" onclick="switch(plugin[skin_gyro].enabled);" visible="false" devices="html5" />
 
 				<layer name="skin_btn_vr"        style="skin_base|skin_glow" crop="0|0|80|64"    align="center"      x="0" y="0"  scale="0.5" onclick="webvr.enterVR();" visible="false" />
 
@@ -419,33 +408,6 @@
 			);
 	  	);
 	</action>
-
-
-	<action name="skin_addmapspots">
-		for(set(i,0), i LT scene.count, inc(i),
-			if(scene[get(i)].lat,
-				txtadd(spotname, 'spot', get(i));
-				txtadd(spotclickevent, 'skin_hidetooltips(); activatespot(',get(spotname),'); loadscene(', get(scene[get(i)].name), ',null,get(skin_settings.loadscene_flags),get(skin_settings.loadscene_blend)); skin_updatescroll(); delayedcall(0.5,skin_showmap(false));');
-				copy(scene[get(i)].mapspotname, spotname);
-				addspot(get(spotname), get(scene[get(i)].lat), get(scene[get(i)].lng), get(scene[get(i)].heading), false, get(spotclickevent), null);
-				if(skin_settings.tooltips_mapspots,
-					set(layer[skin_map].spot[get(spotname)].tooltip, get(scene[get(i)].title) );
-					txtadd(layer[skin_map].spot[get(spotname)].onover, 'set(hovering,true);',  get(style[skin_tooltips].onover) );
-					txtadd(layer[skin_map].spot[get(spotname)].onout,  'set(hovering,false);', get(style[skin_tooltips].onout)  );
-				  );
-			  );
-		  );
-
-		if(xml.scene != null,
-			activatespot( get(scene[get(xml.scene)].mapspotname) );
-		  ,
-			activatespot(spot0);
-		  );
-
-		<!-- zoom and pan the map to see all spots at the same time -->
-		zoomToSpotsExtent();
-	</action>
-
 
 	<action name="skin_setup_littleplanetintro">
 		copy(lp_scene, xml.scene);
@@ -727,7 +689,6 @@
 
 
 	<action name="skin_hideskin">
-		if(layer[skin_map].state    != 'closed', skin_showmap(false);    wait(0.40); );
 		if(layer[skin_thumbs].state != 'closed', skin_showthumbs(false); wait(0.25); );
 
 		set(hidetime, calc('%1' == 'instant' ? 0.0 : 0.5));
@@ -778,32 +739,20 @@
 		  );
 	</action>
 
-
-	<action name="skin_showmap">
-		if(%1 == null, if(layer[skin_map].state == 'closed', set(show,true), set(show,false)); , set(show,%1); );
+	<action name="skin_bring_scroll_layer_up">
 		mul(mh, layer[skin_scroll_layer].pixelheight, -1);
-		if(show,
-			tween(layer[skin_thumbs_container].alpha, 0.0, 0.25, default, set(layer[skin_thumbs_container].visible,false));
-			set(layer[skin_map].visible, true);
-			tween(layer[skin_map].alpha, 1.0, 0.25);
-			set(layer[skin_map].state, 'opened');
-			sub(hh,area.pixelheight,skin_settings.controlbar_offset);
-			sub(hh,layer[skin_control_bar].height);
-			sub(hh,32);
-			add(mh,hh);
-			sub(hh,skin_settings.controlbar_overlap);
-			copy(layer[skin_map].height, hh);
-			tween(layer[skin_scroll_layer].y, get(mh), 0.5, easeOutQuint);
-		  ,
-		  	if(layer[skin_map].state != 'closed',
-				set(layer[skin_map].state, 'closed');
-				add(mh, layer[skin_scroll_layer].y_offset);
-				tween(layer[skin_map].alpha, 0.0, 0.5, easeOutQuint);
-				tween(layer[skin_scroll_layer].y, get(mh), 0.5, easeOutQuint, set(layer[skin_map].visible,false) );
-			  );
-		  );
+		sub(hh,area.pixelheight,skin_settings.controlbar_offset);
+		sub(hh,layer[skin_control_bar].height);
+		sub(hh,32);
+		add(mh,hh);
+		sub(hh,skin_settings.controlbar_overlap);
+		tween(layer[skin_scroll_layer].y, get(mh), 0.5, easeOutQuint);
 	</action>
 
+	<action name="skin_bring_scroll_layer_down">
+		add(mh, layer[skin_scroll_layer].y_offset);
+		tween(layer[skin_scroll_layer].y, get(mh), 0.5, easeOutQuint, set(layer[skin_map].visible,false) );
+	</action>
 
 	<action name="skin_keydown_event">
 		if(keycode == 33, skin_nextscene_loop(-1) );            	<!-- Page Up   - previous scene -->

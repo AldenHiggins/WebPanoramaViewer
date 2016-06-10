@@ -543,6 +543,24 @@
 		set(layer[get(name)].y_closed, calc(layer[get(name)].y - skin_settings.controlbar_offset - skin_settings.controlbar_height + skin_settings.controlbar_offset_closed));
 	</action>
 
+	<!--
+	////////////////////////////////////////////////////////////////////////////////////
+	//////////////////////////////    SHOW/HIDE SKIN     ///////////////////////////////
+	////////////////////////////////////////////////////////////////////////////////////
+	-->
+
+	<action name="skin_showskin">
+		tween(layer[skin_scroll_window  ].y, get(layer[skin_scroll_window  ].y_opened));
+		tween(layer[skin_splitter_bottom].y, get(layer[skin_splitter_bottom].y_opened));
+		tween(layer[skin_control_bar    ].y, get(layer[skin_control_bar    ].y_opened));
+
+		if(layer[skin_logo], set(layer[skin_logo].visible,true); tween(layer[skin_logo].alpha, 1.0); );
+		if(layer[skin_gallery_picture], set(layer[skin_gallery_picture].visible,true); tween(layer[skin_gallery_picture].alpha, 1.0); );
+
+		stopdelayedcall(skin_btn_show_alpha);
+		set(layer[skin_btn_show].visible, false);
+		delayedcall(skin_btn_show_alpha, 0.25, tween(layer[skin_btn_show].alpha, 0.0, 0.0); );
+	</action>
 
 	<action name="skin_hideskin">
 		if(layer[skin_thumbs].state != 'closed', skin_showthumbs(false); wait(0.25); );
@@ -558,20 +576,6 @@
 		stopdelayedcall(skin_btn_show_alpha);
 		set(layer[skin_btn_show].visible, true);
 		delayedcall(skin_btn_show_alpha, get(hidetime), tween(layer[skin_btn_show].alpha, 0.25, 0.25); );
-	</action>
-
-
-	<action name="skin_showskin">
-		tween(layer[skin_scroll_window  ].y, get(layer[skin_scroll_window  ].y_opened));
-		tween(layer[skin_splitter_bottom].y, get(layer[skin_splitter_bottom].y_opened));
-		tween(layer[skin_control_bar    ].y, get(layer[skin_control_bar    ].y_opened));
-
-		if(layer[skin_logo], set(layer[skin_logo].visible,true); tween(layer[skin_logo].alpha, 1.0); );
-		if(layer[skin_gallery_picture], set(layer[skin_gallery_picture].visible,true); tween(layer[skin_gallery_picture].alpha, 1.0); );
-
-		stopdelayedcall(skin_btn_show_alpha);
-		set(layer[skin_btn_show].visible, false);
-		delayedcall(skin_btn_show_alpha, 0.25, tween(layer[skin_btn_show].alpha, 0.0, 0.0); );
 	</action>
 
 	<!--

@@ -13,10 +13,6 @@
 
 	<!-- skin settings (can be overridden in the tour.xml) -->
 	<skin_settings 
-		maps="true"
-		maps_type="bing"
-		maps_bing_api_key=""
-		maps_zoombuttons="false"
 		gyro="true"
 		webvr="true"
 		littleplanetintro="false"
@@ -36,7 +32,6 @@
 		tooltips_buttons="false"
 		tooltips_thumbs="false"
 		tooltips_hotspots="false"
-		tooltips_mapspots="false"
 		deeplinking="false"
 		loadscene_flags="MERGE"
 		loadscene_blend="OPENBLEND(0.5, 0.0, 0.75, 0.05, linear)"
@@ -242,8 +237,6 @@
 
 				<layer name="skin_btn_thumbs"    style="skin_base|skin_glow" crop="0|128|64|64"  align="left"        x="50"   y="0"  scale="0.5" ondown2="skin_showthumbs();" />
 
-				<layer name="skin_btn_map"       style="skin_base|skin_glow" crop="64|128|64|64" align="left"        x="90"   y="0"  scale="0.5" ondown2="skin_showthumbs(false); skin_testFUnction();" visible="false" />
-
 				<layer name="skin_btn_gyro"      style="skin_base|skin_glow" crop="0|384|64|64"  align="center"      x="+20" y="0"  scale="0.5" onclick="switch(plugin[skin_gyro].enabled);" visible="false" devices="html5" />
 
 				<layer name="skin_btn_vr"        style="skin_base|skin_glow" crop="0|0|80|64"    align="center"      x="0" y="0"  scale="0.5" onclick="webvr.enterVR();" visible="false" />
@@ -442,7 +435,6 @@
 	<action name="skin_onresize">
 		mul(mh, area.pixelheight, -1);
 		if(layer[skin_thumbs].state == 'opened', add(mh,layer[skin_thumbs].height); );
-		if(layer[skin_map].state    == 'opened', sub(hh,area.pixelheight,skin_settings.controlbar_offset); sub(hh,layer[skin_control_bar].height); sub(hh,32); add(mh,hh); add(mh,skin_settings.controlbar_overlap); sub(mh, layer[skin_scroll_layer].y_offset); copy(layer[skin_map].height, hh); );
 		add(mh, layer[skin_scroll_layer].y_offset);
 		set(layer[skin_scroll_layer].y, get(mh));
 		skin_arrange_buttons();
@@ -453,7 +445,6 @@
 	<action name="skin_arrange_buttons">
 		calc(show_selbuttons, scene.count GT 1);
 		calc(show_thumbutton, skin_settings.thumbs == true);
-		calc(show_mapbutton,  skin_settings.maps == true);
 		calc(show_gyrobutton, plugin[skin_gyro].available == true AND view.vlookatrange == 180 );
 		calc(show_vrbutton,   webvr.isavailable == true);
 		if (device.desktop, calc(show_vrbutton, false););
@@ -473,10 +464,6 @@
 		copy(layer[skin_btn_thumbs].visible, show_thumbutton);
 		copy(layer[skin_btn_thumbs].x, lpos);
 		if(show_thumbutton, inc(lpos,40));
-
-		copy(layer[skin_btn_map].visible, show_mapbutton);
-		copy(layer[skin_btn_map].x, lpos);
-		if(show_mapbutton, inc(lpos,40));
 
 		if(device.desktop
 			,
@@ -593,11 +580,6 @@
 				set(layer[skin_thumbborder].visible, true);
 			  ,
 				set(layer[skin_thumbborder].visible, false);
-			  );
-
-			if(scene[get(xml.scene)].mapspotname,
-				layer[skin_map].activatespot(get(scene[get(xml.scene)].mapspotname));
-				layer[skin_map].pantospot(get(scene[get(xml.scene)].mapspotname));
 			  );
 
 			if(plugin[skin_gyro].isavailable == true AND view.vlookatrange == 180,

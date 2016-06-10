@@ -15,7 +15,6 @@
 	<skin_settings 
 		gyro="true"
 		webvr="true"
-		littleplanetintro="false"
 		title="true"
 		thumbs="true"
 		thumbs_width="120" 
@@ -401,36 +400,6 @@
 			);
 	  	);
 	</action>
-
-	<action name="skin_setup_littleplanetintro">
-		copy(lp_scene, xml.scene);
-		copy(lp_hlookat, view.hlookat);
-		copy(lp_vlookat, view.vlookat);
-		copy(lp_fov, view.fov);
-		copy(lp_fovmax, view.fovmax);
-		copy(lp_limitview, view.limitview);
-		set(view.fovmax, 170);
-		set(view.limitview, lookto);
-		set(view.vlookatmin, 90);
-		set(view.vlookatmax, 90);
-		lookat(calc(lp_hlookat - 180), 90, 150, 1, 0, 0);
-		set(events[lp_events].onloadcomplete,
-			delayedcall(0.5,
-				if(lp_scene === xml.scene,
-					set(control.usercontrol, off);
-					copy(view.limitview, lp_limitview);
-					set(view.vlookatmin, null);
-					set(view.vlookatmax, null);
-					tween(view.hlookat|view.vlookat|view.fov|view.distortion, calc('' + lp_hlookat + '|' + lp_vlookat + '|' + lp_fov + '|' + 0.0),
-						3.0, easeOutQuad,
-						set(control.usercontrol, all);
-						tween(view.fovmax, get(lp_fovmax));
-						);
-				  );
-			  );
-		  );
-	</action>
-
 
 	<action name="skin_onresize">
 		mul(mh, area.pixelheight, -1);

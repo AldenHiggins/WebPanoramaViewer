@@ -31,7 +31,6 @@
 		tooltips_buttons="false"
 		tooltips_thumbs="false"
 		tooltips_hotspots="false"
-		deeplinking="false"
 		loadscene_flags="MERGE"
 		loadscene_blend="OPENBLEND(0.5, 0.0, 0.75, 0.05, linear)"
 		loadscene_blend_prev="SLIDEBLEND(0.5, 180, 0.75, linear)"
@@ -279,10 +278,9 @@
 	<events 
 		name="skin_events" keep="true"
 		onxmlcomplete="set(events[skin_events].onxmlcomplete,null); skin_startup();"
-		onnewpano="skin_showloading(true); skin_update_scene_infos(); skin_deeplinking_update_url();"
+		onnewpano="skin_showloading(true); skin_update_scene_infos();"
 		onremovepano="skin_showloading(true);"
 		onloadcomplete="skin_showloading(false);"
-		onidle="skin_deeplinking_update_url();"
 		onresize="skin_onresize();"
 		onenterfullscreen.fullscreensupport="set(layer[skin_btn_fs].crop, '64|576|64|64');"
 		onexitfullscreen.fullscreensupport="set(layer[skin_btn_fs].crop, '0|576|64|64');"
@@ -648,7 +646,7 @@
 		tween(layer[skin_control_bar].y,     get(layer[skin_control_bar    ].y_closed), get(hidetime));
 
 		if(layer[skin_logo], tween(layer[skin_logo].alpha, 0.0, 0.5, default, set(layer[skin_logo].visible,false)); );
-		if(layer[skin_gallery_picture], tween(layer[skin_gallery_picture].alpha, 0.0, 0.5, default, set(layer[skin_gallery_picture].visible,false)); );\
+		if(layer[skin_gallery_picture], tween(layer[skin_gallery_picture].alpha, 0.0, 0.5, default, set(layer[skin_gallery_picture].visible,false)); );
 
 		stopdelayedcall(skin_btn_show_alpha);
 		set(layer[skin_btn_show].visible, true);
@@ -700,32 +698,6 @@
 		if(keycode == 35, skin_gotoscene(calc(scene.count-1)) );	<!-- End       - last scene -->
 		if(keycode == 36, skin_gotoscene(0) );                  	<!-- Home/Pos1 - first scene -->
 	</action>
-
-
-	<action name="skin_deeplinking_update_url">
-		if(skin_settings.deeplinking AND (!webvr OR webvr.isenabled === false),
-			copy(adr, browser.location);
-			indexoftxt(qi, get(adr), '?');
-			if(qi GT 0, subtxt(adr, adr, 0, get(qi)));
-			copy(si, scene[get(xml.scene)].index);
-			copy(h, view.hlookat);
-			copy(v, view.vlookat);
-			copy(f, view.fov);
-			copy(d, view.distortion);
-			copy(a, view.architectural);
-			clamp(d, 0.0, 1.0);
-			clamp(a, 0.0, 1.0);
-			set(pp, calc(f LT 10 ? 6 : 2));
-			roundval(h, get(pp));
-			roundval(v, get(pp));
-			roundval(f, get(pp));
-			roundval(d, 2);
-			roundval(a, 1);
-			set(adr, calc(adr + '?startscene=' + si + '&amp;startactions=lookat('+h+','+v+','+f+','+d+','+a+');'));
-			js( history.replaceState(null, document.title, get(adr)); );
-		  );
-	</action>
-
 
 	<!-- reload the scene when there is a special image for VR -->
 	<action name="skin_reloadscene_webvr">

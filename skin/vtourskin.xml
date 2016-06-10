@@ -290,8 +290,8 @@
 	//////////////////////////////    SKIN ACTIONS    ///////////////////////////////////
 	////////////////////////////////////////////////////////////////////////////////////
 	-->
+
 	<action name="skin_startup">
-		<!-- Apply skin settings on startup -->
 		if(skin_settings.thumbs,
 			if(skin_settings.thumbs_opened, set(layer[skin_thumbs].state,'opened'); set(layer[skin_thumbs_container].visible,true); );
 			copy(layer[skin_thumbs].draggable, skin_settings.thumbs_dragging);
@@ -516,33 +516,6 @@
 		loadscene(get(scene[get(newsceneindex)].name),null,get(skin_settings.loadscene_flags),calc(%1 LT 0 ? skin_settings.loadscene_blend_prev : skin_settings.loadscene_blend_next));
 	</action>
 
-	<action name="skin_hidetooltips">
-		set(layer[skin_tooltip].alpha,0.0);
-		set(layer[skin_tooltip].visible,false);
-	</action>
-
-
-	<action name="skin_buttonglow">
-		if('%1' !== 'null',
-			set(strength,0.7);
-			if(%2 != null, set(strength,%2));
-			set(layer[skin_buttonglow].parent, %1);
-			set(layer[skin_buttonglow].visible, true);
-			tween(layer[skin_buttonglow].alpha, get(strength), 0.07);
-		  ,
-			tween(layer[skin_buttonglow].alpha, 0.0, 0.1, default,
-				set(layer[skin_buttonglow].parent, null);
-				set(layer[skin_buttonglow].visible, false);
-			  );
-		  );
-	</action>
-
-
-	<action name="skin_calc_opened_closed">
-		set(layer[get(name)].y_opened, get(layer[get(name)].y));
-		set(layer[get(name)].y_closed, calc(layer[get(name)].y - skin_settings.controlbar_offset - skin_settings.controlbar_height + skin_settings.controlbar_offset_closed));
-	</action>
-
 	<!--
 	////////////////////////////////////////////////////////////////////////////////////
 	//////////////////////////////    SHOW/HIDE SKIN     ///////////////////////////////
@@ -684,6 +657,33 @@
 
 	<!--
 	////////////////////////////////////////////////////////////////////////////////////
+	//////////////////////////////    STYLE ACTIONS     ////////////////////////////////
+	////////////////////////////////////////////////////////////////////////////////////
+	-->
+
+	<action name="skin_hidetooltips">
+		set(layer[skin_tooltip].alpha,0.0);
+		set(layer[skin_tooltip].visible,false);
+	</action>
+
+	<action name="skin_buttonglow">
+		if('%1' !== 'null'
+			,
+			set(strength,0.7);
+			if(%2 != null, set(strength,%2));
+			set(layer[skin_buttonglow].parent, %1);
+			set(layer[skin_buttonglow].visible, true);
+			tween(layer[skin_buttonglow].alpha, get(strength), 1.07);
+		  	,
+			tween(layer[skin_buttonglow].alpha, 0.0, 0.1, default,
+				set(layer[skin_buttonglow].parent, null);
+				set(layer[skin_buttonglow].visible, false);
+		  	);
+	  	);
+	</action>
+
+	<!--
+	////////////////////////////////////////////////////////////////////////////////////
 	////////////////////////////    HELPER FUNCTIONS    ////////////////////////////////
 	////////////////////////////////////////////////////////////////////////////////////
 	-->
@@ -694,5 +694,10 @@
 		add(mh, %1);
 		add(mh, layer[skin_scroll_layer].y_offset);
 		tween(layer[skin_scroll_layer].y, get(mh), 0.5, easeOutQuint, %2);			
+	</action>
+
+	<action name="skin_calc_opened_closed">
+		set(layer[get(name)].y_opened, get(layer[get(name)].y));
+		set(layer[get(name)].y_closed, calc(layer[get(name)].y - skin_settings.controlbar_offset - skin_settings.controlbar_height + skin_settings.controlbar_offset_closed));
 	</action>
 </krpano>

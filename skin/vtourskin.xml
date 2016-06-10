@@ -292,20 +292,24 @@
 	-->
 
 	<action name="skin_startup">
-		if(skin_settings.thumbs,
+		if(skin_settings.thumbs
+			,
 			if(skin_settings.thumbs_opened, set(layer[skin_thumbs].state,'opened'); set(layer[skin_thumbs_container].visible,true); );
 			copy(layer[skin_thumbs].draggable, skin_settings.thumbs_dragging);
-			if(skin_settings.thumbs_onhoverscrolling AND device.mouse,
+			if(skin_settings.thumbs_onhoverscrolling AND device.mouse
+				,
 				set(layer[skin_thumbs].draggable, false);
 				set(layer[skin_thumbs].onhover_autoscrolling, true);
 			);
 		);
 
-		if(skin_settings.gyro AND !device.desktop AND device.html5,
+		if(skin_settings.gyro AND !device.desktop AND device.html5
+			,
 			copy(plugin[skin_gyro].url, plugin[skin_gyro].html5_url);
 		);
 
-		if(skin_settings.webvr AND device.html5 AND device.webgl,
+		if(skin_settings.webvr AND device.html5 AND device.webgl
+			,
 			copy(plugin[WebVR].url, plugin[WebVR].pluginurl);
 		);
 
@@ -316,6 +320,12 @@
 		set(layer[skin_layer].visible, true);
 	</action>
 
+	<!--
+	////////////////////////////////////////////////////////////////////////////////////
+	//////////////////////////////   RESIZE ACTIONS   //////////////////////////////////
+	////////////////////////////////////////////////////////////////////////////////////
+	-->
+
 	<action name="skin_onresize">
 		mul(mh, area.pixelheight, -1);
 		if(layer[skin_thumbs].state == 'opened', add(mh,layer[skin_thumbs].height); );
@@ -323,7 +333,6 @@
 		set(layer[skin_scroll_layer].y, get(mh));
 		skin_arrange_buttons();
 	</action>
-
 
 	<!-- determine the visibility of the buttons and calculate their positions -->
 	<action name="skin_arrange_buttons">
@@ -380,44 +389,11 @@
 		if(show_fsbutton, inc(rpos,40));
 	</action>
 
-
-	<action name="skin_updatescroll">
-		if(layer[skin_thumbs].loaded,
-			set(cursceneindex, 0);
-			if(xml.scene, copy(cursceneindex, scene[get(xml.scene)].index));
-			layer[skin_thumbs].setcenter(get(scene[get(cursceneindex)].thumbx), get(scene[get(cursceneindex)].thumby));
-		  );
-	</action>
-
-
-	<action name="skin_updatethumbscroll">
-		copy(padding,skin_settings.thumbs_padding);
-
-		if(skin_settings.thumbs_scrollbuttons,
-			if(loverflow GT 0, set(layer[skin_thumbs_scrollleft].visible,true),  set(layer[skin_thumbs_scrollleft].visible,false) );
-			if(roverflow GT 0, set(layer[skin_thumbs_scrollright].visible,true), set(layer[skin_thumbs_scrollright].visible,false) );
-		  );
-
-		if(skin_settings.thumbs_scrollindicator,
-			if(woverflow GT 0,
-				set(layer[skin_thumbs_scrollindicator].visible,true);
-				sub(iw,pixelwidth,woverflow);
-				div(pw,iw,pixelwidth);
-				div(px,loverflow,woverflow);
-				mul(pw,iw);
-				copy(layer[skin_thumbs_scrollindicator].width,pw);
-				sub(iw,pw);
-				sub(iw,padding);
-				sub(iw,padding);
-				mul(px,iw);
-				add(px,padding);
-				copy(layer[skin_thumbs_scrollindicator].x,px);
-			  ,
-				set(layer[skin_thumbs_scrollindicator].visible,false);
-			  );
-		  );
-	</action>
-
+	<!--
+	////////////////////////////////////////////////////////////////////////////////////
+	/////////////////////////////    SWITCHING SCENES     //////////////////////////////
+	////////////////////////////////////////////////////////////////////////////////////
+	-->
 
 	<action name="skin_update_scene_infos">
 		if(xml.scene !== null AND scene[get(xml.scene)].index GE 0,
@@ -485,7 +461,6 @@
 		  );
 	</action>
 
-
 	<action name="skin_gotoscene">
 		if(scene[%1],
 			copy(cursceneindex, scene[get(xml.scene)].index);
@@ -496,7 +471,6 @@
 		  );
 	</action>
 
-
 	<action name="skin_nextscene">
 		add(newsceneindex, scene[get(xml.scene)].index, %1);
 		if(newsceneindex GE 0 AND newsceneindex LT scene.count,
@@ -505,7 +479,6 @@
 			loadscene(get(scene[get(newsceneindex)].name),null,get(skin_settings.loadscene_flags),calc(%1 LT 0 ? skin_settings.loadscene_blend_prev : skin_settings.loadscene_blend_next));
 		  );
 	</action>
-
 
 	<action name="skin_nextscene_loop">
 		add(newsceneindex, scene[get(xml.scene)].index, %1);
@@ -652,6 +625,46 @@
 			set(layer[skin_thumbs].state, 'closed');
 			tween(layer[skin_thumbs].alpha, 0.0, 0.25, easeOutQuint);
 			skin_change_scroll_layer_height(0);
+	  	);
+	</action>
+
+	<action name="skin_updatescroll">
+		if(layer[skin_thumbs].loaded
+			,
+			set(cursceneindex, 0);
+			if(xml.scene, copy(cursceneindex, scene[get(xml.scene)].index));
+			layer[skin_thumbs].setcenter(get(scene[get(cursceneindex)].thumbx), get(scene[get(cursceneindex)].thumby));
+	  	);
+	</action>
+
+	<action name="skin_updatethumbscroll">
+		copy(padding,skin_settings.thumbs_padding);
+
+		if(skin_settings.thumbs_scrollbuttons
+			,
+			if(loverflow GT 0, set(layer[skin_thumbs_scrollleft].visible,true),  set(layer[skin_thumbs_scrollleft].visible,false) );
+			if(roverflow GT 0, set(layer[skin_thumbs_scrollright].visible,true), set(layer[skin_thumbs_scrollright].visible,false) );
+	  	);
+
+		if(skin_settings.thumbs_scrollindicator
+			,
+			if(woverflow GT 0
+				,
+				set(layer[skin_thumbs_scrollindicator].visible,true);
+				sub(iw,pixelwidth,woverflow);
+				div(pw,iw,pixelwidth);
+				div(px,loverflow,woverflow);
+				mul(pw,iw);
+				copy(layer[skin_thumbs_scrollindicator].width,pw);
+				sub(iw,pw);
+				sub(iw,padding);
+				sub(iw,padding);
+				mul(px,iw);
+				add(px,padding);
+				copy(layer[skin_thumbs_scrollindicator].x,px);
+			  	,
+				set(layer[skin_thumbs_scrollindicator].visible,false);
+		  	);
 	  	);
 	</action>
 

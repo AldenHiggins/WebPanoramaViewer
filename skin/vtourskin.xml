@@ -35,7 +35,6 @@
 		loadscene_blend="OPENBLEND(0.5, 0.0, 0.75, 0.05, linear)"
 		loadscene_blend_prev="SLIDEBLEND(0.5, 180, 0.75, linear)"
 		loadscene_blend_next="SLIDEBLEND(0.5,   0, 0.75, linear)"
-		loadingtext="loading..."
 		layout_width="100%"
 		layout_maxwidth="2000"
 		controlbar_width="-24"
@@ -599,16 +598,6 @@
 		loadscene(get(scene[get(newsceneindex)].name),null,get(skin_settings.loadscene_flags),calc(%1 LT 0 ? skin_settings.loadscene_blend_prev : skin_settings.loadscene_blend_next));
 	</action>
 
-
-	<action name="skin_showloading">
-		if(display.stereo == true,
-			set(layer[skin_loadingtext].visible, false);
-		  ,
-			set(layer[skin_loadingtext].visible, %1);
-		  );
-	</action>
-
-
 	<action name="skin_hidetooltips">
 		set(layer[skin_tooltip].alpha,0.0);
 		set(layer[skin_tooltip].visible,false);
@@ -706,65 +695,6 @@
 				loadscene(get(xml.scene), null, MERGE|KEEPVIEW|KEEPMOVING|KEEPHOTSPOTS|NOPREVIEW, BLEND(0.5));
 			  );
 		  );
-	</action>
-
-	<action name="skin_changecontrolmode">
-		switch(control.mouse, moveto, drag);
-		switch(control.touch, moveto, drag);
-	</action>
-
-	<action name="skin_view_look_straight">
-		if(view.vlookat LT -80 OR view.vlookat GT +80,
-			tween(view.vlookat, 0.0, 1.0, easeInOutSine);
-			tween(view.fov,     100, distance(150,0.8));
-		  );
-	</action>
-
-	<action name="skin_view_normal">
-		skin_view_look_straight();
-		tween(view.architectural, 0.0, distance(1.0,0.5));
-		tween(view.pannini,       0.0, distance(1.0,0.5));
-		tween(view.distortion,    0.0, distance(1.0,0.5));
-	</action>
-
-	<action name="skin_view_fisheye">
-		skin_view_look_straight();
-		tween(view.architectural, 0.0,  distance(1.0,0.5));
-		tween(view.pannini,       0.0,  distance(1.0,0.5));
-		tween(view.distortion,    0.35, distance(1.0,0.5));
-	</action>
-
-	<action name="skin_view_architectural">
-		skin_view_look_straight();
-		tween(view.architectural, 1.0, distance(1.0,0.5));
-		tween(view.pannini,       0.0, distance(1.0,0.5));
-		tween(view.distortion,    0.0, distance(1.0,0.5));
-	</action>
-
-	<action name="skin_view_stereographic">
-		skin_view_look_straight();
-		tween(view.architectural, 0.0, distance(1.0,0.5));
-		tween(view.pannini,       0.0, distance(1.0,0.5));
-		tween(view.distortion,    1.0, distance(1.0,0.8));
-	</action>
-
-	<action name="skin_view_pannini">
-		skin_view_look_straight();
-		tween(view.architectural, 0.0, distance(1.0,0.5));
-		tween(view.pannini,       1.0, distance(1.0,0.8));
-		if(view.distortion LT 0.1,
-			tween(view.distortion, 1.0, distance(1.0,0.8));
-		  );
-	</action>
-
-	<action name="skin_view_littleplanet">
-		tween(view.architectural, 0.0, distance(1.0,0.5));
-		tween(view.pannini,       0.0, distance(1.0,0.5));
-		tween(view.distortion,    1.0, distance(1.0,0.8));
-		tween(view.fov,           150, distance(150,0.8));
-		tween(view.vlookat,        90, distance(100,0.8));
-		add(new_hlookat, view.hlookat, 123.0);
-		tween(view.hlookat, get(new_hlookat), distance(100,0.8));
 	</action>
 
 </krpano>

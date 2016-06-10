@@ -396,88 +396,82 @@
 	-->
 
 	<action name="skin_update_scene_infos">
-		if(xml.scene !== null AND scene[get(xml.scene)].index GE 0,
-
-			if(skin_settings.title,
+		if(xml.scene !== null AND scene[get(xml.scene)].index GE 0
+			,
+			<!-- Title -->
+			if(skin_settings.title
+				,
 				if(title, txtadd(layer[skin_title].html, get(title), ' - ', get(scene[get(xml.scene)].title) ); , copy(layer[skin_title].html, scene[get(xml.scene)].title ); );
 				delayedcall(0.1, set(layer[skin_title].visible,true) );
-			  );
+		  	);
 
-			if(skin_settings.thumbs_loop == false,
-				if(scene[get(xml.scene)].index GT 0,
+		  	<!-- Thumbnails -->
+			if(skin_settings.thumbs_loop == false
+				,
+				if(scene[get(xml.scene)].index GT 0
+					,
 					set(layer[skin_btn_prev].enabled, true);
 					set(layer[skin_btn_prev].alpha, 1.0);
-				  ,
+				  	,
 					set(layer[skin_btn_prev].enabled, false);
 					set(layer[skin_btn_prev].alpha, 0.3);
-				  );
+			  	);
 
 				sub(lastsceneindex, scene.count, 1);
-				if(scene[get(xml.scene)].index LT lastsceneindex,
+				if(scene[get(xml.scene)].index LT lastsceneindex
+					,
 					set(layer[skin_btn_next].enabled, true);
 					set(layer[skin_btn_next].alpha, 1.0);
-				  ,
+				  	,
 					set(layer[skin_btn_next].enabled, false);
 					set(layer[skin_btn_next].alpha, 0.3);
-				  );
-			  ,
-				if(scene.count GT 1,
+			  	);
+			  	,
+				if(scene.count GT 1
+					,
 					set(layer[skin_btn_prev].enabled, true);
 					set(layer[skin_btn_prev].alpha, 1.0);
 					set(layer[skin_btn_next].enabled, true);
 					set(layer[skin_btn_next].alpha, 1.0);
-				  ,
+				  	,
 					set(layer[skin_btn_prev].enabled, false);
 					set(layer[skin_btn_prev].alpha, 0.3);
 					set(layer[skin_btn_next].enabled, false);
 					set(layer[skin_btn_next].alpha, 0.3);
-				  );
-			  );
+			  	);
+		  	);
 
+		  	<!-- More thumbnails -->
 			txtadd(parentname, 'skin_thumb_', get(scene[get(xml.scene)].index));
-			if(layer[get(parentname)],
+			if(layer[get(parentname)]
+				,
 				set(layer[skin_thumbborder].parent, get(parentname));
 				set(layer[skin_thumbborder].visible, true);
-			  ,
+			  	,
 				set(layer[skin_thumbborder].visible, false);
-			  );
-
-			if(plugin[skin_gyro].isavailable == true AND view.vlookatrange == 180,
-				set(layer[skin_btn_gyro].visible, true);
-			  ,
-				set(layer[skin_btn_gyro].visible, false)
-			  );
-
-			if(view.vlookatrange LT 180,
-				if(backup_control_bouncinglimits === null,
-					copy(backup_control_bouncinglimits, control.bouncinglimits);
-				  );
-				set(control.bouncinglimits, false);
-			  ,
-				if(backup_control_bouncinglimits !== null,
-					copy(control.bouncinglimits, backup_control_bouncinglimits);
-				  );
-			  );
-		  );
+			);
+	  	);
 	</action>
 
 	<action name="skin_gotoscene">
-		if(scene[%1],
+		if(scene[%1]
+			,
 			copy(cursceneindex, scene[get(xml.scene)].index);
 			copy(newsceneindex, scene[%1].index);
 			txtadd(layer[skin_thumbborder].parent, 'skin_thumb_', get(newsceneindex));
 			layer[skin_thumbs].scrolltocenter(get(scene[get(newsceneindex)].thumbx), get(scene[get(newsceneindex)].thumby));
 			loadscene(get(scene[get(newsceneindex)].name),null,get(skin_settings.loadscene_flags),calc(newsceneindex LT cursceneindex ? skin_settings.loadscene_blend_prev : (newsceneindex GT cursceneindex ? skin_settings.loadscene_blend_next : skin_settings.loadscene_blend)));
-		  );
+	  	);
 	</action>
 
 	<action name="skin_nextscene">
 		add(newsceneindex, scene[get(xml.scene)].index, %1);
-		if(newsceneindex GE 0 AND newsceneindex LT scene.count,
+		if(newsceneindex GE 0 AND newsceneindex LT scene.count
+			,
 			txtadd(layer[skin_thumbborder].parent, 'skin_thumb_', get(newsceneindex));
 			layer[skin_thumbs].scrolltocenter(get(scene[get(newsceneindex)].thumbx), get(scene[get(newsceneindex)].thumby));
 			loadscene(get(scene[get(newsceneindex)].name),null,get(skin_settings.loadscene_flags),calc(%1 LT 0 ? skin_settings.loadscene_blend_prev : skin_settings.loadscene_blend_next));
-		  );
+	  	);
 	</action>
 
 	<action name="skin_nextscene_loop">

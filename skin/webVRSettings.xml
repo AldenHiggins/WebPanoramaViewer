@@ -112,4 +112,13 @@
 		}
 	]]></action>
 	<!-- VR support -->
+
+	<!-- reload the scene when there is a special image for VR -->
+	<action name="skin_reloadscene_webvr">
+		delayedcall(0.1,
+			if(scene[get(xml.scene)].havevrimage,
+				loadscene(get(xml.scene), null, MERGE|KEEPVIEW|KEEPMOVING|KEEPHOTSPOTS|NOPREVIEW, BLEND(0.5));
+			  );
+		);
+	</action>
 </krpano>

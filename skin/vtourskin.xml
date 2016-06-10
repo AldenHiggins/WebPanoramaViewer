@@ -688,13 +688,4 @@
 		if(keycode == 36, skin_gotoscene(0) );                  	<!-- Home/Pos1 - first scene -->
 	</action>
 
-	<!-- reload the scene when there is a special image for VR -->
-	<action name="skin_reloadscene_webvr">
-		delayedcall(0.1,
-			if(scene[get(xml.scene)].havevrimage,
-				loadscene(get(xml.scene), null, MERGE|KEEPVIEW|KEEPMOVING|KEEPHOTSPOTS|NOPREVIEW, BLEND(0.5));
-			  );
-		  );
-	</action>
-
 </krpano>

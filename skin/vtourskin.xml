@@ -283,7 +283,6 @@
 		onresize="skin_onresize();"
 		onenterfullscreen.fullscreensupport="set(layer[skin_btn_fs].crop, '64|576|64|64');"
 		onexitfullscreen.fullscreensupport="set(layer[skin_btn_fs].crop, '0|576|64|64');"
-		onkeydown="skin_keydown_event();"
     />
 
 	<!--
@@ -674,18 +673,17 @@
 	  	);
 	</action>
 
+	<!--
+	////////////////////////////////////////////////////////////////////////////////////
+	////////////////////////////    HELPER FUNCTIONS    ////////////////////////////////
+	////////////////////////////////////////////////////////////////////////////////////
+	-->
+
+	<!-- Helper function that expands the control bar upwards to fit content like thumbnails or a pop up map -->
 	<action name="skin_change_scroll_layer_height">
 		mul(mh, layer[skin_scroll_layer].pixelheight, -1);
 		add(mh, %1);
 		add(mh, layer[skin_scroll_layer].y_offset);
 		tween(layer[skin_scroll_layer].y, get(mh), 0.5, easeOutQuint, %2);			
 	</action>
-
-	<action name="skin_keydown_event">
-		if(keycode == 33, skin_nextscene_loop(-1) );            	<!-- Page Up   - previous scene -->
-		if(keycode == 34, skin_nextscene_loop(+1) );            	<!-- Page Dowm - next scene -->
-		if(keycode == 35, skin_gotoscene(calc(scene.count-1)) );	<!-- End       - last scene -->
-		if(keycode == 36, skin_gotoscene(0) );                  	<!-- Home/Pos1 - first scene -->
-	</action>
-
 </krpano>

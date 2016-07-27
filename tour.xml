@@ -17,99 +17,6 @@
 		createGifHotspot("VRUI", "gifs/NewVR/SpriteSheet", -200, 860, 600, 600, 1536, 1, "true", 1, 1, .9, 15, "scene_watchUsWork360");
 	</action>
 
-	<!-- 
-		Parameters:
-		hotspotName, %1
-		imageName, %2
-		xPosition, %3
-		yPosition, %4
-		width, %5
-		height, %6
-		originalCubeSize, %7
-		cubeSide, %8
-		- Cube Sides: 
-			0 Front
-			1 Back
-			2 Right
-			3 Left
-			4 Up
-			5 Down
-		visibility, %9
-		xScale, %10
-		yScale, %11
-		mobileSpriteSheetScale, %12
-		frameRate, %13
-		sceneTheHotspotPointsTo, %14
-	 -->
-	<action name="createGifHotspot">
-		<!-- Change the ath and atv based on what face the cube is on -->
-		set(ath, 0);
-		set(atv, 0);
-
-		if (%8 == 1, set(ath, 180));
-		if (%8 == 2, set(ath, 90));
-		if (%8 == 3, set(ath, -90));
-		if (%8 == 4, set(atv, -90));
-		if (%8 == 5, set(atv, 90));
-
-		<!-- Change the image name for a mobile device -->
-		set(imageName, %2);
-		if (device.mobile OR device.tablet
-			,
-			txtadd(imageName, get(imageName), "Mobile");
-		);
-		txtadd(imageName, get(imageName), ".png");
-
-		<!-- Calculate the position and area of the hotspot based on the originalCubeSize -->
-		set(xPosition, %3);
-		set(yPosition, %4);
-		set(width, calc(%5 * %10));
-		set(height, calc(%6 * %11));
-		set(originalCubeSize, %7);
-
-		<!-- Calculate the width/height of the hotspot -->
-		mul(width, 1000);
-		div(width, get(originalCubeSize));
-
-		mul(height, 1000);
-		div(height, get(originalCubeSize));
-
-		<!-- Calculate the X and Y Position of the hotspot -->
-		mul(xPosition, 1000);
-		div(xPosition, get(originalCubeSize));
-		sub(xPosition, 500);
-
-		mul(yPosition, 1000);
-		div(yPosition, get(originalCubeSize));
-		sub(yPosition, 500);
-
-		<!-- Create the hotspot -->
-		addhotspot(%1);
-		set(hotspot[%1].url, get(imageName));
-		set(hotspot[%1].ox, get(xPosition));
-		set(hotspot[%1].oy, get(yPosition));
-		set(hotspot[%1].ath, get(ath));
-		set(hotspot[%1].atv, get(atv));
-		set(hotspot[%1].distorted, "true");
-		set(hotspot[%1].edge, "lefttop");
-		set(hotspot[%1].capture, "false");
-		set(hotspot[%1].visible, %9);
-		set(hotspot[%1].keep, "true");
-		set(hotspot[%1].scale, "1.0");
-		set(hotspot[%1].width, get(width));
-		set(hotspot[%1].height, get(height));
-
-		<!-- Scale the x and y of the animation if it's on mobile -->
-		if (device.mobile OR device.tablet
-			,
-			set(hotspot[%1].onloaded, "do_crop_animation(calc(%5 * %12), calc(%6 * %12), %13)");
-			,
-			set(hotspot[%1].onloaded, "do_crop_animation(%5, %6, %13)");
-		);
-		
-		set(hotspot[%1].onclick, loadscene(%14););
-	</action>
-
 	<action name="showHideHotspots">
 		set(hotspot["SunsetUI"].visible, %1);
 		set(hotspot["OfficeUI"].visible, %1);
@@ -123,42 +30,6 @@
 		<img name="img4" url="%SWFPATH%/images/image4.jpg" title="F/A-18 C Hornet" />
 		<img name="img5" url="%SWFPATH%/images/image5.jpg" title="Forest" />
 	</gallery>
-
-	<!--
-		do_crop_animation(framewidth, frameheight, framerate)
-		- animation by changing the image cropping
-		- parameters:
-		  - framewidth - the width from one frame in pixels
-		  - frameheight - the height from one frame in pixels
-		  - framerate - the animation frame rate in 'frames per second'
-		- the image can be a vertical or horizontal (or both) image-strip / sprite-sheet
-		- the action will loop automatically through all frames from left to right and top to bottom
-	-->
-	<action name="do_crop_animation">
-		<!-- add attributes to the hotspot -->
-		registerattribute(xframes, calc((imagewidth / %1) BOR 0));
-		registerattribute(yframes, calc((imageheight / %2) BOR 0));
-		registerattribute(frames, calc(xframes * yframes));
-		registerattribute(frame, 0);
-
-		set(crop, '0|0|%1|%2');
-
-		setinterval(calc('crop_anim_' + name), calc(1.0 / %3),
-			if(loaded
-				,
-				inc(frame);
-				if(frame GE frames, if(onlastframe !== null, onlastframe() ); set(frame,0); );
-				mod(xpos, frame, xframes);
-				div(ypos, frame, xframes);
-				Math.floor(ypos);
-				mul(xpos, %1);
-				mul(ypos, %2);
-				calc(crop, xpos + '|' + ypos + '|%1|%2');
-			    ,
-				clearinterval(calc('crop_anim_' + name));
-			);
-		);
-	</action>
 	
 	<scene name="scene_pano" title="Cabin" onstart="showHideHotspots('true')" thumburl="panos/pano.tiles/thumb.jpg" lat="" lng="" heading="">
 		<view hlookat="0" vlookat="0" fovtype="MFOV" fov="120" maxpixelzoom="2.0" fovmin="70" fovmax="140" limitview="auto" />
@@ -183,7 +54,7 @@
 			pausedonstart="true"
 			loop="true"
 			volume="1.0"
-			videourl="video/Office360.mp4"
+			videourl="video/Office360_IOS.mp4"
 			onloaded="loadinganimation_stoploading(); playvideo();"
         />
 
@@ -204,7 +75,7 @@
 			pausedonstart="true"
 			loop="true"
 			volume="1.0"
-			videourl="video/ProjectorDemonstration.mp4"
+			videourl="video/ProjectorDemonstration_IOS.mp4"
 			onloaded="loadinganimation_stoploading(); playvideo();"
         />
 
@@ -225,7 +96,7 @@
 			pausedonstart="true"
 			loop="true"
 			volume="1.0"
-			videourl="video/SantaMonica.mp4"
+			videourl="video/SantaMonica_IOS.mp4"
 			onloaded="loadinganimation_stoploading(); playvideo();"
         />
 

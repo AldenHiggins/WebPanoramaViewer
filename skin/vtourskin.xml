@@ -5,6 +5,7 @@
 	<include url="%SWFPATH%/skin/plugins/youtube-player.xml" />
 	<include url="%SWFPATH%/skin/plugins/swipe_gallery.xml" />
 	<include url="%SWFPATH%/skin/plugins/loadinganimation.xml" />
+	<include url="%SWFPATH%/skin/utilities.xml" />
 	<include url="%SWFPATH%/plugins/webvr.xml" devices="html5" />
 	<plugin name="skin_gyro" keep="true" url="" html5_url="%SWFPATH%/plugins/gyro2.js" devices="html5" enabled="false" onavailable="skin_arrange_buttons();" />
 
@@ -13,6 +14,10 @@
 
 	<!-- skin settings (can be overridden in the tour.xml) -->
 	<skin_settings 
+		home_button_visible="true"
+		logo_visible="true"
+		image_gallery_button_visible="false"
+		next_previous_buttons_visible="false"
 		gyro="true"
 		webvr="true"
 		title="true"
@@ -122,14 +127,15 @@
 	<style 
 		name="skin_thumbtext_style"
 		url="%SWFPATH%/plugins/textfield.swf"
-		align="bottom"
-		width="100%"
+		align="center"
+		width="150%"
 		autoheight="true"
-		y="5"
+		y="0"
+		scale="1.0"
 		enabled="false"
 		background="false"
 		border="false"
-		css="calc:skin_settings.design_text_css + ' text-align:center; font-size:10px;'" 
+		css="calc:skin_settings.design_text_css + ' text-align:center; font-size:30px;'" 
 		textshadow="get:skin_settings.design_text_shadow" 
 	/>
 
@@ -203,11 +209,11 @@
 		<layer name="skin_scroll_window" type="container" align="bottom" width="100%" height="100%" x="0" y="calc:skin_settings.controlbar_offset + skin_settings.controlbar_height - skin_settings.controlbar_overlap" maskchildren="true" onloaded="skin_calc_opened_closed();" zorder="1">
 			<layer name="skin_scroll_layer" type="container" align="bottom" width="get:skin_settings.controlbar_width" height="100%" x="0" y="200" y_offset="get:skin_settings.controlbar_overlap" accuracy="1" bgalpha="get:skin_settings.design_bgalpha" bgcolor="get:skin_settings.design_bgcolor" bgborder="get:skin_settings.design_bgborder" bgroundedge="get:skin_settings.design_bgroundedge" bgshadow="get:skin_settings.design_bgshadow">
 				<!-- Title of the scene -->
-				<layer name="skin_title" url="%SWFPATH%/plugins/textfield.swf" align="lefttop" edge="leftbottom" x="4" y="0" zorder="4" enabled="false" background="false" border="false" css="calc:skin_settings.design_text_css + ' text-align:left; font-style:italic; font-size:12px;'" textshadow="get:skin_settings.design_text_shadow" visible="false" />
+				<layer name="skin_title" url="%SWFPATH%/plugins/textfield.swf" align="lefttop" edge="leftbottom" x="-1" y="0" zorder="4" enabled="false" background="false" border="false" css="calc:skin_settings.design_text_css + ' text-align:left; font-style:italic; font-size:12px;'" textshadow="get:skin_settings.design_text_shadow" visible="false" />
 
 				<!-- Buttons/Logos above the control bar -->
-				<layer name="skin_logo"      url="%SWFPATH%/skin/KilographIcon.png" align="lefttop"   zorder="6"  visible="true"   x="0"    y="-80"  scale="0.2" alpha="0.7" />
-				<layer name="skin_gallery_picture"      url="%SWFPATH%/skin/GalleryPicture.png" align="lefttop" zorder="6" visible="true"      x="60"    y="-80"  scale="0.1" alpha="0.7" />
+				<layer name="skin_logo"      url="%SWFPATH%/skin/KilographIcon.png" align="lefttop"   zorder="6"  visible="get:skin_settings.logo_visible"   x="-3"    y="-80"  scale="0.2" alpha="0.7" />
+				<layer name="skin_gallery_picture"      url="%SWFPATH%/skin/GalleryPicture.png" align="lefttop" zorder="6" visible="get:skin_settings.image_gallery_button_visible"      x="60"    y="-80"  scale="0.1" alpha="0.7" />
 
 				<!-- Contains the layers that pop up over the control bar -->
 				<layer name="skin_scroll_container" type="container" align="lefttop" width="100%" height="100%" x="0" y="0" bgroundedge="get:skin_settings.design_bgroundedge" maskchildren="true">
@@ -238,14 +244,14 @@
 
 				<layer name="skin_btn_vr"        style="skin_base|skin_glow" crop="0|0|80|64"    align="center"      x="0" y="0"  scale="0.5" onclick="webvr.enterVR();" visible="false" />
 
-				<layer name="skin_btn_home"        style="skin_base|skin_glow" crop="0|192|64|64"    align="center"      x="0" y="0"  scale="0.5" onclick="loadscene(scene_pano)" visible="true" />
+				<layer name="skin_btn_home"        style="skin_base|skin_glow" crop="0|192|64|64"    align="center"      x="0" y="0"  scale="0.5" onclick="loadscene(scene_pano)" visible="get:skin_settings.home_button_visible" />
 
 				<layer name="skin_btn_fs"        style="skin_base|skin_glow" crop="0|576|64|64"  align="right"       x="90"   y="0"  scale="0.5" onclick="switch(fullscreen);" devices="fullscreensupport" />
 
 				<layer name="skin_btn_hide"      style="skin_base|skin_glow" crop="0|448|64|64"  align="right"       x="50"   y="0"  scale="0.5" onclick="skin_hideskin()" />
 
 				<layer name="skin_btn_show" type="container" bgcapture="true" align="bottom" width="100%" height="get:skin_settings.controlbar_height" y="calc:skin_settings.controlbar_height - skin_settings.controlbar_offset_closed" onclick="skin_showskin()" onhover="tween(alpha,1.0);" onout="tween(alpha,0.25);" ondown.touch="onhover();" onup.touch="onout();" visible="false" capture="false" alpha="0.0">
-					<layer name="skin_btn_show_icon" style="skin_base" crop="64|448|64|64" scale="0.5" align="bottom" y="2" enabled="false" />
+					<layer name="skin_btn_show_icon" style="skin_base" crop="64|448|64|64" scale="1.0" align="bottom" y="2" enabled="false" />
 				</layer>
 
 				<layer name="skin_btn_next"      style="skin_base|skin_glow" crop="64|64|64|64"  align="right"       x="5"    y="0"   scale="0.5" alpha="0.5"  onclick="if(skin_settings.thumbs_loop, skin_nextscene_loop(+1), skin_nextscene(+1) );" />
@@ -337,6 +343,7 @@
 	<!-- determine the visibility of the buttons and calculate their positions -->
 	<action name="skin_arrange_buttons">
 		calc(show_selbuttons, scene.count GT 1);
+		set(show_selbuttons, get(skin_settings.next_previous_buttons_visible) );
 		calc(show_thumbutton, skin_settings.thumbs == true);
 		calc(show_gyrobutton, plugin[skin_gyro].available == true AND view.vlookatrange == 180 );
 		calc(show_vrbutton,   webvr.isavailable == true);
